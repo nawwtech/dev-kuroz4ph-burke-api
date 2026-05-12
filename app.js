@@ -8,15 +8,9 @@ const axios = require("axios")
 const app = express()
 const port = process.env.PORT || 3000
 
-// ======================
-// ERROR HANDLER
-// ======================
 process.on("uncaughtException", console.error)
 process.on("unhandledRejection", console.error)
 
-// ======================
-// CORS
-// ======================
 app.use((req, res, next) => {
 
 res.setHeader(
@@ -28,13 +22,6 @@ next()
 
 })
 
-// ======================
-// COOKIES
-// ======================
-
-// ======================
-// STATIC
-// ======================
 app.use(
 express.static(
 path.join(
@@ -44,9 +31,6 @@ __dirname,
 )
 )
 
-// ======================
-// HOMEPAGE
-// ======================
 app.get("/", (req, res) => {
 
 res.sendFile(
@@ -59,9 +43,6 @@ __dirname,
 
 })
 
-// ======================
-// API INFO
-// ======================
 app.get("/api", (req, res) => {
 
 res.json({
@@ -93,9 +74,6 @@ githubstalk:
 
 })
 
-// ======================
-// SEARCH API
-// ======================
 app.get("/api/search", async (req, res) => {
 
 const q =
@@ -176,117 +154,113 @@ e.message
 
 })
 
-// ======================
-// YTMP3 API
-// ======================
+const { Innertube } = require("youtubei.js")
+
 app.get("/api/ytmp3", async (req, res) => {
 
-const url = req.query.url
+    const url = req.query.url
 
-if (!url) {
+    if (!url) {
 
-return res.status(400).json({
+        return res.status(400).json({
 
-status: false,
+            status: false,
 
-message: "Masukkan url YouTube"
+            message:
+                "Masukkan url YouTube"
+        })
+    }
 
-})
+    try {
 
-}
+        const youtube =
+            await Innertube.create()
 
-try {
+        const videoId =
+            url.match(
+                /(?:v=|\/)([0-9A-Za-z_-]{11})/
+            )?.[1]
 
-const response = await axios.get(
-`https://api.ikyyxd.my.id/download/ytmp3?url=${encodeURIComponent(url)}`,
-{
-headers: {
-Accept: "application/json"
-}
-}
-)
+        if (!videoId) {
 
-const data = response.data
+            return res.status(400).json({
 
-if (!data.status || !data.result?.audio?.url) {
+                status: false,
 
-return res.status(500).json({
+                message:
+                    "URL tidak valid"
+            })
+        }
 
-status: false,
+        const info =
+            await youtube.getInfo(videoId)
 
-message: "Audio tidak ditemukan"
+        const title =
+            info.basic_info.title
 
-})
+        const duration =
+            info.basic_info.duration
 
-}
+        const thumbnail =
+            info.basic_info.thumbnail?.[0]?.url
 
-// ambil full url tanpa modifikasi
-const audioUrl = String(
-data.result.audio.url
-).trim()
+        // ambil audio terbaik
+        const audio =
+            info.streaming_data
+            .adaptive_formats
+            .filter(v => v.has_audio)
+            .sort(
+                (a, b) =>
+                b.bitrate - a.bitrate
+            )[0]
 
-res.setHeader(
-"Content-Type",
-"application/json; charset=utf-8"
-)
+        return res.status(200).json({
 
-return res.status(200).send({
+            status: true,
 
-status: true,
+            creator:
+                "Kuroz4ph",
 
-creator: "Kuroz4ph",
+            result: {
 
-result: {
+                title,
 
-title:
-data.result.title ||
+                thumbnail,
 
-"Unknown",
+                duration,
 
-thumbnail:
-data.result.thumbnail ||
+                source:
+                    `https://youtube.com/watch?v=${videoId}`,
 
-null,
+                audio: {
 
-duration:
-data.result.duration ||
+                    quality:
+`${Math.floor(audio.bitrate / 1000)}kb/s`,
 
-null,
+                    mime:
+                        audio.mime_type,
 
-audio: {
+                    filesize:
+                        Number(audio.content_length) || 0,
 
-quality:
-data.result.audio.quality ||
+                    url:
+                        audio.url
+                }
+            }
+        })
 
-null,
+    } catch (e) {
 
-url:
-audioUrl
+        console.log(e)
 
-}
+        return res.status(500).json({
 
-}
+            status: false,
 
-})
-
-} catch (e) {
-
-return res.status(500).json({
-
-status: false,
-
-message:
-
-e.response?.data?.message ||
-
-e.message ||
-
-"Terjadi kesalahan"
-
-})
-
-}
-
+            message:
+                e.message
+        })
+    }
 })
 
 app.get("/api/proxy-audio", async (req, res) => {
@@ -318,10 +292,32 @@ app.get("/api/proxy-audio", async (req, res) => {
             }
         })
 
-        res.setHeader(
+     res.setHeader(
             "Content-Type",
+            response.headers["content-type"] ||
             "audio/mpeg"
         )
+
+        if (
+            response.headers["content-length"]
+        ) {
+
+            res.setHeader(
+                "Content-Length",
+                response.headers["content-length"]
+            )
+        }
+
+        res.setHeader(
+            "Accept-Ranges",
+            "bytes"
+        )
+
+        res.setHeader(
+            "Cache-Control",
+            "public, max-age=86400"
+        )
+
 
         response.data.pipe(res)
 
@@ -332,12 +328,12 @@ app.get("/api/proxy-audio", async (req, res) => {
             e.message
         )
 
-        res.status(500).send("Proxy failed")
+        res.status(500).send(
+            "Proxy failed"
+        )
     }
 })
-// ======================
-// WAKTU SHOLAT
-// ======================
+
 app.get("/api/waktusholat", async (req, res) => {
 
 const zone =
@@ -451,9 +447,7 @@ data[zone]
 
 })
 
-// ======================
-// QR GENERATOR
-// ======================
+
 app.get("/api/qr", async (req, res) => {
 
 try {
@@ -504,9 +498,7 @@ e.message
 
 })
 
-// ======================
-// GITHUB STALK
-// ======================
+
 app.get("/api/githubstalk", async (req, res) => {
 
 const user =
@@ -602,9 +594,7 @@ message:
 
 })
 
-// ======================
-// 404
-// ======================
+
 app.use((req, res) => {
 
 res.status(404).json({
@@ -618,9 +608,6 @@ message:
 
 })
 
-// ======================
-// LOCAL & VERCEL
-// ======================
 if (
 require.main === module
 ) {
