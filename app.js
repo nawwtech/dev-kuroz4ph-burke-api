@@ -305,11 +305,9 @@ app.get("/api/proxy-audio", async (req, res) => {
         const buffer =
             Buffer.from(response.data)
 
-        // ================= HEADERS =================
-
         res.setHeader(
             "Content-Type",
-            "audio/mpeg"
+            "audio/webm"
         )
 
         res.setHeader(
@@ -321,13 +319,6 @@ app.get("/api/proxy-audio", async (req, res) => {
             "Accept-Ranges",
             "bytes"
         )
-
-        res.setHeader(
-            "Cache-Control",
-            "public, max-age=86400"
-        )
-
-        // ================= SEND =================
 
         return res.end(buffer)
 
