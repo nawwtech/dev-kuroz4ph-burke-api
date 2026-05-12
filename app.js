@@ -229,9 +229,44 @@ app.get("/api/play", async (req, res) => {
 
     try {
 
-        const stream =
-            await scdl.download(
+        const info =
+            await scdl.getInfo(url)
+
+        const transcoding =
+            info.media.transcodings.find(x =>
+
+                x.format.protocol ===
+                "progressive"
+
+                &&
+
+                x.quality ===
+                "sq"
+            )
+
+        if (!transcoding) {
+
+            return res.json({
+
+                status: false,
+
+                message:
+                    "Full audio tidak tersedia"
+            })
+        }
+
+        const streamUrl =
+            await scdl.getDownloadURL(
                 url
+            )
+
+        const audio =
+            await axios.get(
+                streamUrl,
+                {
+                    responseType:
+                        "stream"
+                }
             )
 
         res.setHeader(
@@ -239,12 +274,7 @@ app.get("/api/play", async (req, res) => {
             "audio/mpeg"
         )
 
-        res.setHeader(
-            "Content-Disposition",
-            "inline"
-        )
-
-        stream.pipe(res)
+        audio.data.pipe(res)
 
     } catch (err) {
 
