@@ -76,262 +76,144 @@ githubstalk:
 
 app.get("/api/search", async (req, res) => {
 
-const q =
-req.query.q
+    const query =
+        req.query.q
 
-if (!q) {
+    if (!query) {
 
-return res.status(400).json({
+        return res.status(400).json({
 
-status: false,
+            status: false,
 
-creator: "Kuroz4ph",
-
-message:
-"Masukkan query"
-
-})
-
-}
-
-try {
-
-const search =
-await yts(q)
-
-const result =
-search.videos
-.slice(0, 35)
-.map((v, i) => ({
-
-no: i + 1,
-
-title:
-v.title,
-
-duration:
-v.timestamp,
-
-views:
-v.views,
-
-author:
-v.author.name,
-
-url:
-v.url,
-
-thumbnail:
-v.thumbnail
-
-}))
-
-res.status(200).json({
-
-status: true,
-
-creator: "Kuroz4ph",
-
-total:
-result.length,
-
-result
-
-})
-
-} catch (e) {
-
-res.status(500).json({
-
-status: false,
-
-message:
-e.message
-
-})
-
-}
-
-})
-
-app.get("/api/ytmp3", async (req, res) => {
-
-const url = req.query.url
-
-if (!url) {
-
-return res.status(400).json({
-
-status: false,
-
-message: "Masukkan url YouTube"
-
-})
-
-}
-
-try {
-
-const response = await axios.get(
-`https://api.ikyyxd.my.id/download/ytmp3?url=${encodeURIComponent(url)}`,
-{
-headers: {
-Accept: "application/json"
-}
-}
-)
-
-const data = response.data
-
-if (!data.status || !data.result?.audio?.url) {
-
-return res.status(500).json({
-
-status: false,
-
-message: "Audio tidak ditemukan"
-
-})
-
-}
-
-// ambil full url tanpa modifikasi
-const audioUrl = String(
-data.result.audio.url
-).trim()
-
-res.setHeader(
-"Content-Type",
-"application/json; charset=utf-8"
-)
-
-return res.status(200).send({
-
-status: true,
-
-creator: "Kuroz4ph",
-
-result: {
-
-title:
-data.result.title ||
-
-"Unknown",
-
-thumbnail:
-data.result.thumbnail ||
-
-null,
-
-duration:
-data.result.duration ||
-
-null,
-
-audio: {
-
-quality:
-data.result.audio.quality ||
-
-null,
-
-url:
-audioUrl
-
-}
-
-}
-
-})
-
-} catch (e) {
-
-return res.status(500).json({
-
-status: false,
-
-message:
-
-e.response?.data?.message ||
-
-e.message ||
-
-"Terjadi kesalahan"
-
-})
-
-}
-
-})
-app.get("/api/proxy-audio", async (req, res) => {
-
-    const url = req.query.url
-
-    if (!url) {
-
-        return res.status(400).send("No URL")
+            message:
+                "Masukkan query"
+        })
     }
 
     try {
 
-        const response = await axios({
+        const response =
+            await axios.get(
+`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=15`
+            )
 
-            method: "GET",
+        const results =
+            response.data.results || []
 
-            url,
+        const data =
+            results.map((item, i) => ({
 
-            responseType:
-                "arraybuffer",
+                no:
+                    i + 1,
 
-            timeout:
-                120000,
+                title:
+                    item.trackName,
 
-            maxRedirects:
-                10,
+                artist:
+                    item.artistName,
 
-            headers: {
+                album:
+                    item.collectionName,
 
-                "User-Agent":
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                thumbnail:
+                    item.artworkUrl100
+                    ?.replace(
+                        "100x100",
+                        "500x500"
+                    ),
 
-                "Accept":
-                    "*/*",
+                preview:
+                    item.previewUrl,
 
-                "Referer":
-                    "https://www.youtube.com/"
-            }
+                duration:
+                    Math.floor(
+                        item.trackTimeMillis / 1000
+                    ) || 30
+            }))
+
+        return res.json({
+
+            status: true,
+
+            creator:
+                "Kuroz4ph",
+
+            total:
+                data.length,
+
+            result:
+                data
         })
 
-        const buffer =
-            Buffer.from(response.data)
+    } catch (err) {
+
+        console.log(err)
+
+        return res.status(500).json({
+
+            status: false,
+
+            message:
+                err.message
+        })
+    }
+})
+
+// ====================== PLAY ======================
+
+app.get("/api/play", async (req, res) => {
+
+    const url =
+        req.query.url
+
+    if (!url) {
+
+        return res.status(400).json({
+
+            status: false,
+
+            message:
+                "Masukkan url"
+        })
+    }
+
+    try {
+
+        const response =
+            await axios({
+
+                method: "GET",
+
+                url,
+
+                responseType:
+                    "stream",
+
+                headers: {
+
+                    "User-Agent":
+                        "Mozilla/5.0"
+                }
+            })
 
         res.setHeader(
             "Content-Type",
-            "audio/webm"
+            "audio/mpeg"
         )
 
-        res.setHeader(
-            "Content-Length",
-            buffer.length
-        )
+        response.data.pipe(res)
 
-        res.setHeader(
-            "Accept-Ranges",
-            "bytes"
-        )
+    } catch (err) {
 
-        return res.end(buffer)
+        console.log(err)
 
-    } catch (e) {
+        return res.status(500).json({
 
-        console.log(
-            "PROXY ERROR:",
-            e.message
-        )
+            status: false,
 
-        return res.status(500).send(
-            "Proxy failed"
-        )
+            message:
+                err.message
+        })
     }
 })
 
