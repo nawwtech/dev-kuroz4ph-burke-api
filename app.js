@@ -74,14 +74,19 @@ githubstalk:
 
 })
 
+const scdl =
+require("soundcloud-downloader").default
+
+// ====================== SEARCH ======================
+
 app.get("/api/search", async (req, res) => {
 
-    const query =
+    const q =
         req.query.q
 
-    if (!query) {
+    if (!q) {
 
-        return res.status(400).json({
+        return res.json({
 
             status: false,
 
@@ -94,62 +99,87 @@ app.get("/api/search", async (req, res) => {
 
         const response =
             await axios.get(
-`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=15`
-            )
+`https://soundcloud.com/search/sounds?q=${encodeURIComponent(q)}`,
+            {
+                headers: {
 
-        const results =
-            response.data.results || []
+                    "User-Agent":
+                        "Mozilla/5.0"
+                }
+            })
 
-        const data =
-            results.map((item, i) => ({
+        const html =
+            response.data
 
-                no:
-                    i + 1,
+        const regex =
+/"url":"(https:\\\/\\\/soundcloud\.com\\\/[^"]+)"/g
 
-                title:
-                    item.trackName,
+        const urls = []
 
-                artist:
-                    item.artistName,
+        let match
 
-                album:
-                    item.collectionName,
+        while (
+            (match = regex.exec(html))
+        ) {
 
-                thumbnail:
-                    item.artworkUrl100
-                    ?.replace(
-                        "100x100",
-                        "500x500"
-                    ),
+            const url =
+                match[1]
+                .replace(/\\u0026/g, "&")
+                .replace(/\\\//g, "/")
 
-                preview:
-                    item.previewUrl,
+            if (
+                !urls.includes(url)
+            ) {
 
-                duration:
-                    Math.floor(
-                        item.trackTimeMillis / 1000
-                    ) || 30
-            }))
+                urls.push(url)
+            }
+        }
 
-        return res.json({
+        const results = []
+
+        for (const url of urls.slice(0, 10)) {
+
+            try {
+
+                const info =
+                    await scdl.getInfo(url)
+
+                results.push({
+
+                    title:
+                        info.title,
+
+                    artist:
+                        info.user.username,
+
+                    duration:
+                        Math.floor(
+                            info.duration / 1000
+                        ),
+
+                    thumbnail:
+                        info.artwork_url,
+
+                    url
+                })
+
+            } catch {}
+        }
+
+        res.json({
 
             status: true,
 
             creator:
                 "Kuroz4ph",
 
-            total:
-                data.length,
-
             result:
-                data
+                results
         })
 
     } catch (err) {
 
-        console.log(err)
-
-        return res.status(500).json({
+        res.json({
 
             status: false,
 
@@ -168,7 +198,7 @@ app.get("/api/play", async (req, res) => {
 
     if (!url) {
 
-        return res.status(400).json({
+        return res.json({
 
             status: false,
 
@@ -179,35 +209,21 @@ app.get("/api/play", async (req, res) => {
 
     try {
 
-        const response =
-            await axios({
-
-                method: "GET",
-
-                url,
-
-                responseType:
-                    "stream",
-
-                headers: {
-
-                    "User-Agent":
-                        "Mozilla/5.0"
-                }
-            })
+        const stream =
+            await scdl.download(
+                url
+            )
 
         res.setHeader(
             "Content-Type",
             "audio/mpeg"
         )
 
-        response.data.pipe(res)
+        stream.pipe(res)
 
     } catch (err) {
 
-        console.log(err)
-
-        return res.status(500).json({
+        res.json({
 
             status: false,
 
