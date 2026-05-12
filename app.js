@@ -154,142 +154,114 @@ e.message
 
 })
 
-const { Innertube } = require("youtubei.js")
-
 app.get("/api/ytmp3", async (req, res) => {
 
-    const url = req.query.url
+const url = req.query.url
 
-    if (!url) {
+if (!url) {
 
-        return res.status(400).json({
+return res.status(400).json({
 
-            status: false,
+status: false,
 
-            message:
-                "Masukkan url YouTube"
-        })
-    }
+message: "Masukkan url YouTube"
 
-    try {
-
-        // ================= INIT =================
-
-        const youtube =
-            await Innertube.create()
-
-        // ================= VIDEO ID =================
-
-        const videoId =
-            url.match(
-                /(?:v=|\/)([0-9A-Za-z_-]{11})/
-            )?.[1]
-
-        if (!videoId) {
-
-            return res.status(400).json({
-
-                status: false,
-
-                message:
-                    "URL tidak valid"
-            })
-        }
-
-        // ================= GET INFO =================
-
-        const info =
-            await youtube.getInfo(videoId)
-
-        const basic =
-            info.basic_info || {}
-
-        // ================= GET BEST AUDIO =================
-
-        const audio =
-            info.chooseFormat({
-
-                type: "audio",
-
-                quality: "best"
-            })
-
-        if (!audio?.url) {
-
-            return res.status(500).json({
-
-                status: false,
-
-                message:
-                    "Audio URL tidak ditemukan"
-            })
-        }
-
-        // ================= RESPONSE =================
-
-        return res.status(200).json({
-
-            status: true,
-
-            creator:
-                "Kuroz4ph",
-
-            result: {
-
-                title:
-                    basic.title ||
-                    "Unknown",
-
-                thumbnail:
-                    basic.thumbnail?.[0]?.url ||
-                    null,
-
-                duration:
-                    Number(
-                        basic.duration
-                    ) || 0,
-
-                source:
-`https://youtube.com/watch?v=${videoId}`,
-
-                audio: {
-
-                    quality:
-`${Math.floor((audio.bitrate || 0) / 1000)}kb/s`,
-
-                    mime:
-                        audio.mime_type ||
-                        "audio/webm",
-
-                    filesize:
-                        Number(
-                            audio.content_length
-                        ) || 0,
-
-                    url:
-                        audio.url
-                }
-            }
-        })
-
-    } catch (e) {
-
-        console.log(
-            "YTMP3 ERROR:",
-            e
-        )
-
-        return res.status(500).json({
-
-            status: false,
-
-            message:
-                e.message ||
-                "Terjadi kesalahan"
-        })
-    }
 })
 
+}
+
+try {
+
+const response = await axios.get(
+`https://api.ikyyxd.my.id/download/ytmp3?url=${encodeURIComponent(url)}`,
+{
+headers: {
+Accept: "application/json"
+}
+}
+)
+
+const data = response.data
+
+if (!data.status || !data.result?.audio?.url) {
+
+return res.status(500).json({
+
+status: false,
+
+message: "Audio tidak ditemukan"
+
+})
+
+}
+
+const audioUrl = String(
+data.result.audio.url
+).trim()
+
+res.setHeader(
+"Content-Type",
+"application/json; charset=utf-8"
+)
+
+return res.status(200).send({
+
+status: true,
+
+creator: "Kuroz4ph",
+
+result: {
+
+title:
+data.result.title ||
+
+"Unknown",
+
+thumbnail:
+data.result.thumbnail ||
+
+null,
+
+duration:
+data.result.duration ||
+
+null,
+
+audio: {
+
+quality:
+data.result.audio.quality ||
+
+null,
+
+url:
+audioUrl
+
+}
+
+}
+
+})
+
+} catch (e) {
+
+return res.status(500).json({
+
+status: false,
+
+message:
+
+e.response?.data?.message ||
+
+e.message ||
+
+"Terjadi kesalahan"
+
+})
+
+}
+
+})
 app.get("/api/proxy-audio", async (req, res) => {
 
     const url = req.query.url
