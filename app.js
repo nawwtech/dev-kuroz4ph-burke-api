@@ -99,8 +99,19 @@ app.get("/api/search", async (req, res) => {
 
         const response =
             await axios.get(
-`https://soundcloud.com/search/sounds?q=${encodeURIComponent(q)}`,
+`https://api-v2.soundcloud.com/search/tracks`,
             {
+
+                params: {
+
+                    q,
+
+                    client_id:
+                        "2t9loNQH90kzJcsFCODdigxfp325aq4z",
+
+                    limit: 10
+                },
+
                 headers: {
 
                     "User-Agent":
@@ -108,63 +119,33 @@ app.get("/api/search", async (req, res) => {
                 }
             })
 
-        const html =
-            response.data
+        const tracks =
+            response.data.collection || []
 
-        const regex =
-/"url":"(https:\\\/\\\/soundcloud\.com\\\/[^"]+)"/g
+        const results =
+            tracks.map(track => ({
 
-        const urls = []
+                title:
+                    track.title,
 
-        let match
+                artist:
+                    track.user?.username ||
 
-        while (
-            (match = regex.exec(html))
-        ) {
+                    "Unknown",
 
-            const url =
-                match[1]
-                .replace(/\\u0026/g, "&")
-                .replace(/\\\//g, "/")
+                duration:
+                    Math.floor(
+                        track.duration / 1000
+                    ),
 
-            if (
-                !urls.includes(url)
-            ) {
+                thumbnail:
+                    track.artwork_url ||
 
-                urls.push(url)
-            }
-        }
+                    track.user?.avatar_url,
 
-        const results = []
-
-        for (const url of urls.slice(0, 10)) {
-
-            try {
-
-                const info =
-                    await scdl.getInfo(url)
-
-                results.push({
-
-                    title:
-                        info.title,
-
-                    artist:
-                        info.user.username,
-
-                    duration:
-                        Math.floor(
-                            info.duration / 1000
-                        ),
-
-                    thumbnail:
-                        info.artwork_url,
-
-                    url
-                })
-
-            } catch {}
-        }
+                url:
+                    track.permalink_url
+            }))
 
         res.json({
 
@@ -178,6 +159,8 @@ app.get("/api/search", async (req, res) => {
         })
 
     } catch (err) {
+
+        console.log(err.response?.data || err.message)
 
         res.json({
 
