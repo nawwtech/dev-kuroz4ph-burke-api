@@ -173,8 +173,12 @@ app.get("/api/ytmp3", async (req, res) => {
 
     try {
 
+        // ================= INIT =================
+
         const youtube =
             await Innertube.create()
+
+        // ================= GET VIDEO ID =================
 
         const videoId =
             url.match(
@@ -192,27 +196,67 @@ app.get("/api/ytmp3", async (req, res) => {
             })
         }
 
+        // ================= GET INFO =================
+
         const info =
             await youtube.getInfo(videoId)
 
+        const basic =
+            info.basic_info || {}
+
+        // ================= METADATA =================
+
         const title =
-            info.basic_info.title
+            basic.title ||
+            "Unknown"
 
         const duration =
-            info.basic_info.duration
+            Number(
+                basic.duration
+            ) || 0
 
         const thumbnail =
-            info.basic_info.thumbnail?.[0]?.url
+            basic.thumbnail?.[0]?.url ||
+            null
 
-        // ambil audio terbaik
+        // ================= GET FORMATS =================
+
+        const formats = [
+
+            ...(info.streaming_data?.adaptive_formats || []),
+
+            ...(info.streaming_data?.formats || [])
+
+        ]
+
+        // ================= FILTER AUDIO =================
+
         const audio =
-            info.streaming_data
-            .adaptive_formats
-            .filter(v => v.has_audio)
+            formats
+            .filter(v =>
+                v.has_audio &&
+                v.url
+            )
             .sort(
                 (a, b) =>
-                b.bitrate - a.bitrate
+                (b.bitrate || 0) -
+                (a.bitrate || 0)
             )[0]
+
+        // ================= VALIDATE =================
+
+        if (!audio) {
+
+            return res.status(500).json({
+
+                status: false,
+
+                message:
+                    "Audio stream tidak ditemukan"
+            })
+        }
+
+        // ================= RESPONSE =================
 
         return res.status(200).json({
 
@@ -230,18 +274,21 @@ app.get("/api/ytmp3", async (req, res) => {
                 duration,
 
                 source:
-                    `https://youtube.com/watch?v=${videoId}`,
+`https://youtube.com/watch?v=${videoId}`,
 
                 audio: {
 
                     quality:
-`${Math.floor(audio.bitrate / 1000)}kb/s`,
+`${Math.floor((audio.bitrate || 0) / 1000)}kb/s`,
 
                     mime:
-                        audio.mime_type,
+                        audio.mime_type ||
+                        "audio/webm",
 
                     filesize:
-                        Number(audio.content_length) || 0,
+                        Number(
+                            audio.content_length
+                        ) || 0,
 
                     url:
                         audio.url
@@ -251,14 +298,18 @@ app.get("/api/ytmp3", async (req, res) => {
 
     } catch (e) {
 
-        console.log(e)
+        console.log(
+            "YTMP3 ERROR:",
+            e
+        )
 
         return res.status(500).json({
 
             status: false,
 
             message:
-                e.message
+                e.message ||
+                "Terjadi kesalahan"
         })
     }
 })
