@@ -280,13 +280,14 @@ app.get("/api/proxy-audio", async (req, res) => {
 
             url,
 
-            responseType: "stream",
+            responseType:
+                "arraybuffer",
 
-            timeout: 120000,
+            timeout:
+                120000,
 
-            maxRedirects: 10,
-
-            validateStatus: null,
+            maxRedirects:
+                10,
 
             headers: {
 
@@ -296,35 +297,24 @@ app.get("/api/proxy-audio", async (req, res) => {
                 "Accept":
                     "*/*",
 
-                "Accept-Language":
-                    "en-US,en;q=0.9",
-
                 "Referer":
-                    "https://www.youtube.com/",
-
-                "Origin":
-                    "https://www.youtube.com"
+                    "https://www.youtube.com/"
             }
         })
 
-        if (response.status !== 200) {
-
-            return res.status(response.status).send(
-                `Google returned ${response.status}`
-            )
-        }
+        const buffer =
+            Buffer.from(response.data)
 
         // ================= HEADERS =================
 
         res.setHeader(
             "Content-Type",
-            response.headers["content-type"] ||
             "audio/mpeg"
         )
 
         res.setHeader(
             "Content-Length",
-            response.headers["content-length"] || ""
+            buffer.length
         )
 
         res.setHeader(
@@ -337,9 +327,9 @@ app.get("/api/proxy-audio", async (req, res) => {
             "public, max-age=86400"
         )
 
-        // ================= PIPE =================
+        // ================= SEND =================
 
-        response.data.pipe(res)
+        return res.end(buffer)
 
     } catch (e) {
 
@@ -348,7 +338,7 @@ app.get("/api/proxy-audio", async (req, res) => {
             e.message
         )
 
-        res.status(500).send(
+        return res.status(500).send(
             "Proxy failed"
         )
     }
