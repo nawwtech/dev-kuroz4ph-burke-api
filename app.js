@@ -211,7 +211,6 @@ app.get("/api/search", async (req, res) => {
     }
 })
 // ====================== PLAY ======================
-
 app.get("/api/play", async (req, res) => {
 
     const url =
@@ -240,9 +239,16 @@ app.get("/api/play", async (req, res) => {
             "audio/mpeg"
         )
 
+        res.setHeader(
+            "Content-Disposition",
+            "inline"
+        )
+
         stream.pipe(res)
 
     } catch (err) {
+
+        console.log(err.message)
 
         res.json({
 
