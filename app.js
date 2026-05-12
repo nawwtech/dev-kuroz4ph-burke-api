@@ -178,7 +178,7 @@ app.get("/api/ytmp3", async (req, res) => {
         const youtube =
             await Innertube.create()
 
-        // ================= GET VIDEO ID =================
+        // ================= VIDEO ID =================
 
         const videoId =
             url.match(
@@ -204,55 +204,24 @@ app.get("/api/ytmp3", async (req, res) => {
         const basic =
             info.basic_info || {}
 
-        // ================= METADATA =================
-
-        const title =
-            basic.title ||
-            "Unknown"
-
-        const duration =
-            Number(
-                basic.duration
-            ) || 0
-
-        const thumbnail =
-            basic.thumbnail?.[0]?.url ||
-            null
-
-        // ================= GET FORMATS =================
-
-        const formats = [
-
-            ...(info.streaming_data?.adaptive_formats || []),
-
-            ...(info.streaming_data?.formats || [])
-
-        ]
-
-        // ================= FILTER AUDIO =================
+        // ================= GET BEST AUDIO =================
 
         const audio =
-            formats
-            .filter(v =>
-                v.has_audio &&
-                v.url
-            )
-            .sort(
-                (a, b) =>
-                (b.bitrate || 0) -
-                (a.bitrate || 0)
-            )[0]
+            info.chooseFormat({
 
-        // ================= VALIDATE =================
+                type: "audio",
 
-        if (!audio) {
+                quality: "best"
+            })
+
+        if (!audio?.url) {
 
             return res.status(500).json({
 
                 status: false,
 
                 message:
-                    "Audio stream tidak ditemukan"
+                    "Audio URL tidak ditemukan"
             })
         }
 
@@ -267,11 +236,18 @@ app.get("/api/ytmp3", async (req, res) => {
 
             result: {
 
-                title,
+                title:
+                    basic.title ||
+                    "Unknown",
 
-                thumbnail,
+                thumbnail:
+                    basic.thumbnail?.[0]?.url ||
+                    null,
 
-                duration,
+                duration:
+                    Number(
+                        basic.duration
+                    ) || 0,
 
                 source:
 `https://youtube.com/watch?v=${videoId}`,
