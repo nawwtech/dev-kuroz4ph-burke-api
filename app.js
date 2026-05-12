@@ -79,6 +79,43 @@ require("soundcloud-downloader").default
 
 // ====================== SEARCH ======================
 
+async function getClientID() {
+
+    const html =
+        await axios.get(
+            "https://soundcloud.com"
+        )
+
+    const assetUrls =
+        html.data.match(
+/https:\/\/a-v2\.sndcdn\.com\/assets\/.*?\.js/g
+        )
+
+    for (const asset of assetUrls) {
+
+        try {
+
+            const js =
+                await axios.get(asset)
+
+            const match =
+                js.data.match(
+/client_id:"(.*?)"/
+                )
+
+            if (match) {
+
+                return match[1]
+            }
+
+        } catch {}
+    }
+
+    throw new Error(
+        "Client ID tidak ditemukan"
+    )
+}
+
 app.get("/api/search", async (req, res) => {
 
     const q =
@@ -97,6 +134,9 @@ app.get("/api/search", async (req, res) => {
 
     try {
 
+        const client_id =
+            await getClientID()
+
         const response =
             await axios.get(
 `https://api-v2.soundcloud.com/search/tracks`,
@@ -106,8 +146,7 @@ app.get("/api/search", async (req, res) => {
 
                     q,
 
-                    client_id:
-                        "2t9loNQH90kzJcsFCODdigxfp325aq4z",
+                    client_id,
 
                     limit: 10
                 },
@@ -160,7 +199,7 @@ app.get("/api/search", async (req, res) => {
 
     } catch (err) {
 
-        console.log(err.response?.data || err.message)
+        console.log(err.message)
 
         res.json({
 
@@ -171,7 +210,6 @@ app.get("/api/search", async (req, res) => {
         })
     }
 })
-
 // ====================== PLAY ======================
 
 app.get("/api/play", async (req, res) => {
