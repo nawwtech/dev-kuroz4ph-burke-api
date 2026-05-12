@@ -268,55 +268,90 @@ app.get("/api/proxy-audio", async (req, res) => {
 
     if (!url) {
 
-        return res.status(400).send("No URL")
+        return res.status(400).json({
+
+            status: false,
+
+            message:
+                "URL tidak ditemukan"
+        })
     }
 
     try {
 
-        const response = await axios({
-            method: "GET",
-            url,
-            responseType: "stream",
-            maxRedirects: 5,
-            headers: {
+        const response =
+            await axios({
 
-                "User-Agent":
-                    "Mozilla/5.0",
+                method: "GET",
 
-                "Accept":
-                    "*/*",
+                url,
 
-                "Referer":
-                    "https://www.youtube.com/"
-            }
-        })
+                responseType:
+                    "stream",
 
-     res.setHeader(
+                timeout:
+                    120000,
+
+                maxRedirects:
+                    10,
+
+                validateStatus:
+                    null,
+
+                headers: {
+
+                    "User-Agent":
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+
+                    "Accept":
+                        "*/*",
+
+                    "Accept-Language":
+                        "en-US,en;q=0.9",
+
+                    "Referer":
+                        "https://www.youtube.com/",
+
+                    "Origin":
+                        "https://www.youtube.com"
+                }
+            })
+
+        // ================= STATUS =================
+
+        if (response.status !== 200) {
+
+            return res.status(response.status).json({
+
+                status: false,
+
+                message:
+                    `Google returned ${response.status}`
+            })
+        }
+
+        // ================= HEADERS =================
+
+        res.setHeader(
             "Content-Type",
-            response.headers["content-type"] ||
-            "audio/mpeg"
+            response.headers[
+                "content-type"
+            ] || "audio/mpeg"
         )
 
-        if (
-            response.headers["content-length"]
-        ) {
-
-            res.setHeader(
-                "Content-Length",
-                response.headers["content-length"]
-            )
-        }
+        res.setHeader(
+            "Content-Length",
+            response.headers[
+                "content-length"
+            ] || ""
+        )
 
         res.setHeader(
             "Accept-Ranges",
             "bytes"
         )
 
-        res.setHeader(
-            "Cache-Control",
-            "public, max-age=86400"
-        )
-
+        // ================= PIPE =================
 
         response.data.pipe(res)
 
@@ -327,9 +362,14 @@ app.get("/api/proxy-audio", async (req, res) => {
             e.message
         )
 
-        res.status(500).send(
-            "Proxy failed"
-        )
+        return res.status(500).json({
+
+            status: false,
+
+            message:
+                e.message ||
+                "Proxy gagal"
+        })
     }
 })
 
