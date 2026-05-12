@@ -154,273 +154,177 @@ e.message
 
 })
 
-// ====================== YTMP3 API ======================
-
 app.get("/api/ytmp3", async (req, res) => {
+
+const url = req.query.url
+
+if (!url) {
+
+return res.status(400).json({
+
+status: false,
+
+message: "Masukkan url YouTube"
+
+})
+
+}
+
+try {
+
+const response = await axios.get(
+`https://api.ikyyxd.my.id/download/ytmp3?url=${encodeURIComponent(url)}`,
+{
+headers: {
+Accept: "application/json"
+}
+}
+)
+
+const data = response.data
+
+if (!data.status || !data.result?.audio?.url) {
+
+return res.status(500).json({
+
+status: false,
+
+message: "Audio tidak ditemukan"
+
+})
+
+}
+
+// ambil full url tanpa modifikasi
+const audioUrl = String(
+data.result.audio.url
+).trim()
+
+res.setHeader(
+"Content-Type",
+"application/json; charset=utf-8"
+)
+
+return res.status(200).send({
+
+status: true,
+
+creator: "Kuroz4ph",
+
+result: {
+
+title:
+data.result.title ||
+
+"Unknown",
+
+thumbnail:
+data.result.thumbnail ||
+
+null,
+
+duration:
+data.result.duration ||
+
+null,
+
+audio: {
+
+quality:
+data.result.audio.quality ||
+
+null,
+
+url:
+audioUrl
+
+}
+
+}
+
+})
+
+} catch (e) {
+
+return res.status(500).json({
+
+status: false,
+
+message:
+
+e.response?.data?.message ||
+
+e.message ||
+
+"Terjadi kesalahan"
+
+})
+
+}
+
+})
+app.get("/api/proxy-audio", async (req, res) => {
 
     const url = req.query.url
 
     if (!url) {
 
-        return res.status(400).json({
-
-            status: false,
-
-            message:
-                "Masukkan url YouTube"
-        })
+        return res.status(400).send("No URL")
     }
 
     try {
 
-        // ================= VIDEO ID =================
+        const response = await axios({
 
-        const videoId =
-            url.match(
-                /(?:v=|\/)([0-9A-Za-z_-]{11})/
-            )?.[1]
+            method: "GET",
 
-        if (!videoId) {
+            url,
 
-            return res.status(400).json({
+            responseType: "stream",
 
-                status: false,
+            timeout: 120000,
 
-                message:
-                    "URL tidak valid"
-            })
-        }
+            maxRedirects: 10,
 
-        // ================= GET API =================
+            validateStatus: null,
 
-        const response =
-            await axios.get(
-`https://api.ikyyxd.my.id/download/ytmp3?url=${encodeURIComponent(url)}`,
-                {
-                    timeout: 30000,
-                    headers: {
-                        Accept:
-                            "application/json"
-                    }
-                }
-            )
+            headers: {
 
-        const data =
-            response.data
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
 
-        if (
-            !data.status ||
-            !data.result?.audio?.url
-        ) {
+                "Accept":
+                    "*/*",
 
-            return res.status(500).json({
+                "Accept-Language":
+                    "en-US,en;q=0.9",
 
-                status: false,
+                "Referer":
+                    "https://www.youtube.com/",
 
-                message:
-                    "Audio tidak ditemukan"
-            })
-        }
-
-        // ================= RESPONSE =================
-
-        return res.status(200).json({
-
-            status: true,
-
-            creator:
-                "Kuroz4ph",
-
-            result: {
-
-                title:
-                    data.result.title ||
-                    "Unknown",
-
-                thumbnail:
-                    data.result.thumbnail ||
-                    null,
-
-                duration:
-                    data.result.duration ||
-                    0,
-
-                source:
-`https://youtube.com/watch?v=${videoId}`,
-
-                audio: {
-
-                    quality:
-                        data.result.audio.quality ||
-                        "audio",
-
-                    url:
-`${req.protocol}://${req.get("host")}/api/audio/${videoId}`
-                }
+                "Origin":
+                    "https://www.youtube.com"
             }
         })
 
-    } catch (e) {
+        if (response.status !== 200) {
 
-        console.log(
-            "YTMP3 ERROR:",
-            e.message
-        )
-
-        return res.status(500).json({
-
-            status: false,
-
-            message:
-                e.message ||
-                "Terjadi kesalahan"
-        })
-    }
-})
-
-// ====================== AUDIO STREAM API ======================
-
-app.get("/api/audio/:id", async (req, res) => {
-
-    try {
-
-        const videoId =
-            req.params.id
-
-        if (!videoId) {
-
-            return res.status(400).json({
-
-                status: false,
-
-                message:
-                    "Video ID tidak ditemukan"
-            })
-        }
-
-        const youtubeUrl =
-`https://youtube.com/watch?v=${videoId}`
-
-        console.log(
-            "FETCH AUDIO:",
-            youtubeUrl
-        )
-
-        // ================= GET YTMP3 =================
-
-        const response =
-            await axios.get(
-`https://api.ikyyxd.my.id/download/ytmp3?url=${encodeURIComponent(youtubeUrl)}`,
-                {
-                    timeout: 30000,
-                    headers: {
-
-                        "User-Agent":
-                            "Mozilla/5.0",
-
-                        "Accept":
-                            "application/json"
-                    }
-                }
+            return res.status(response.status).send(
+                `Google returned ${response.status}`
             )
-
-        const data =
-            response.data
-
-        if (
-            !data.status ||
-            !data.result?.audio?.url
-        ) {
-
-            return res.status(404).json({
-
-                status: false,
-
-                message:
-                    "Audio tidak ditemukan"
-            })
-        }
-
-        const googleUrl =
-            data.result.audio.url
-
-        console.log(
-            "STREAM GOOGLE AUDIO..."
-        )
-
-        // ================= STREAM AUDIO =================
-
-        const audio =
-            await axios({
-
-                method: "GET",
-
-                url:
-                    googleUrl,
-
-                responseType:
-                    "stream",
-
-                timeout:
-                    120000,
-
-                maxRedirects:
-                    10,
-
-                validateStatus:
-                    null,
-
-                headers: {
-
-                    "User-Agent":
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-
-                    "Accept":
-                        "*/*",
-
-                    "Accept-Language":
-                        "en-US,en;q=0.9",
-
-                    "Referer":
-                        "https://www.youtube.com/",
-
-                    "Origin":
-                        "https://www.youtube.com"
-                }
-            })
-
-        // ================= STATUS =================
-
-        if (audio.status !== 200) {
-
-            console.log(
-                "GOOGLE STATUS:",
-                audio.status
-            )
-
-            return res.status(audio.status).json({
-
-                status: false,
-
-                message:
-                    `Google returned ${audio.status}`
-            })
         }
 
         // ================= HEADERS =================
 
         res.setHeader(
             "Content-Type",
-            audio.headers[
-                "content-type"
-            ] || "audio/mpeg"
+            response.headers["content-type"] ||
+            "audio/mpeg"
         )
 
         res.setHeader(
             "Content-Length",
-            audio.headers[
-                "content-length"
-            ] || ""
+            response.headers["content-length"] || ""
         )
 
         res.setHeader(
@@ -430,32 +334,23 @@ app.get("/api/audio/:id", async (req, res) => {
 
         res.setHeader(
             "Cache-Control",
-            "public, max-age=3600"
-        )
-
-        console.log(
-            "PIPE AUDIO..."
+            "public, max-age=86400"
         )
 
         // ================= PIPE =================
 
-        audio.data.pipe(res)
+        response.data.pipe(res)
 
     } catch (e) {
 
         console.log(
-            "AUDIO API ERROR:",
+            "PROXY ERROR:",
             e.message
         )
 
-        return res.status(500).json({
-
-            status: false,
-
-            message:
-                e.message ||
-                "Audio stream gagal"
-        })
+        res.status(500).send(
+            "Proxy failed"
+        )
     }
 })
 
