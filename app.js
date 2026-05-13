@@ -74,6 +74,111 @@ githubstalk:
 
 })
 
+app.get("/api/cphoto", async (req, res) => {
+
+    try {
+
+        const text =
+            req.query.text
+
+        if (!text) {
+
+            return res.status(400).json({
+
+                status: false,
+
+                message:
+                    "Masukkan parameter text"
+            })
+        }
+
+        // ================= REQUEST =================
+
+        const response =
+            await axios.get(
+                "https://api.ikyyxd.my.id/ai/text2img",
+                {
+
+                    params: {
+
+                        apikey:
+                            "kyzz",
+
+                        text
+                    },
+
+                    timeout:
+                        120000
+                }
+            )
+
+        const data =
+            response.data
+
+        if (!data.status) {
+
+            return res.status(500).json({
+
+                status: false,
+
+                message:
+                    "Gagal generate image"
+            })
+        }
+
+        const imageUrl =
+            data.result.url
+
+        // ================= DOWNLOAD IMAGE =================
+
+        const image =
+            await axios({
+
+                method:
+                    "GET",
+
+                url:
+                    imageUrl,
+
+                responseType:
+                    "arraybuffer",
+
+                timeout:
+                    120000
+            })
+
+        // ================= SEND IMAGE =================
+
+        res.setHeader(
+            "Content-Type",
+            image.headers[
+                "content-type"
+            ] || "image/jpeg"
+        )
+
+        res.send(
+            Buffer.from(
+                image.data
+            )
+        )
+
+    } catch (err) {
+
+        console.log(
+            "CPHOTO ERROR:",
+            err.message
+        )
+
+        res.status(500).json({
+
+            status: false,
+
+            message:
+                err.message
+        })
+    }
+})
+
 const scdl =
 require("soundcloud-downloader").default
 
