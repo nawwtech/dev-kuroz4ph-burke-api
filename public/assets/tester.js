@@ -1,58 +1,85 @@
-window.onload = async ()=>{
+window.addEventListener("DOMContentLoaded", async ()=>{
 
-const apiGrid =
-  document.getElementById("apiGrid")
-
-const modal =
-  document.getElementById("testerModal")
-
-const searchInput =
-  document.getElementById("searchInput")
-
-const sidebar =
-  document.getElementById("sidebar")
-
-const overlay =
-  document.getElementById("sidebarOverlay")
-
-const menuBtn =
-  document.getElementById("menuBtn")
-
-const themeToggle =
-  document.getElementById("themeToggle")
-
-const sidebarButtons =
-  document.querySelectorAll(".sidebar-item")
+const apiGrid = document.getElementById("apiGrid")
+const modal = document.getElementById("testerModal")
+const searchInput = document.getElementById("searchInput")
+const sidebar = document.getElementById("sidebar")
+const overlay = document.getElementById("sidebarOverlay")
+const menuBtn = document.getElementById("menuBtn")
+const themeToggle = document.getElementById("themeToggle")
 
 let allEndpoints = []
 
+// =========================
+// LOAD ENDPOINTS
+// =========================
+
 async function loadEndpoints(){
 
-  const req =
-    await fetch("/data/endpoints.json")
+  try{
 
-  const data =
-    await req.json()
+    const req =
+      await fetch("/data/endpoints.json")
 
-  allEndpoints = data
+    const data =
+      await req.json()
 
-  renderEndpoints(data)
+    allEndpoints = data
+
+    renderEndpoints(data)
+
+    // realtime count
+
+    const apiCount =
+      document.getElementById("apiCount")
+
+    if(apiCount){
+
+      apiCount.innerText =
+        data.length
+
+    }
+
+  }catch(err){
+
+    console.log(err)
+
+  }
 
 }
+
+// =========================
+// RENDER ENDPOINTS
+// =========================
 
 function renderEndpoints(data){
 
   apiGrid.innerHTML = ""
+
+  if(data.length < 1){
+
+    apiGrid.innerHTML = `
+
+      <div class="empty-state">
+        Endpoint not found.
+      </div>
+
+    `
+
+    return
+
+  }
 
   data.forEach(api=>{
 
     const card =
       document.createElement("div")
 
-    card.className =
-      "api-card"
+    card.className = "api-card"
 
     card.innerHTML = `
+
+      <div class="card-glow"></div>
 
       <div class="method">
         ${api.method}
@@ -71,18 +98,19 @@ function renderEndpoints(data){
       </div>
 
       <button class="try-btn">
-        Try Endpoint
+        Execute API
       </button>
 
     `
 
-    card
-      .querySelector(".try-btn")
-      .onclick = ()=>{
+    const button =
+      card.querySelector(".try-btn")
+
+    button.addEventListener("click",()=>{
 
       openTester(api)
 
-    }
+    })
 
     apiGrid.appendChild(card)
 
@@ -90,10 +118,13 @@ function renderEndpoints(data){
 
 }
 
+// =========================
+// OPEN TESTER
+// =========================
+
 function openTester(api){
 
-  modal.style.display =
-    "flex"
+  modal.style.display = "flex"
 
   modal.innerHTML = `
 
@@ -101,26 +132,21 @@ function openTester(api){
 
   <div class="tester-box">
 
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    ">
+    <div class="tester-top">
 
-      <h2>
-        ${api.name}
-      </h2>
+      <div>
 
-      <button
-        id="closeTester"
-        style="
-          border:none;
-          background:none;
-          color:white;
-          font-size:26px;
-          cursor:pointer;
-        "
-      >
+        <span class="tester-badge">
+          ${api.method}
+        </span>
+
+        <h2>
+          ${api.name}
+        </h2>
+
+      </div>
+
+      <button id="closeTester">
         ✕
       </button>
 
@@ -144,21 +170,149 @@ function openTester(api){
 
   `
 
-  document
-    .getElementById("closeTester")
-    .onclick = ()=>{
+  const closeBtn =
+    document.getElementById("closeTester")
+
+  const executeBtn =
+    document.getElementById("executeBtn")
+
+  const testerOverlay =
+    document.querySelector(".tester-overlay")
+
+  closeBtn.onclick = ()=>{
 
     modal.style.display = "none"
 
   }
 
+  testerOverlay.onclick = ()=>{
+
+    modal.style.display = "none"
+
+  }
+
+  executeBtn.onclick = async ()=>{
+
+    const input =
+      document
+        .getElementById("testerInput")
+        .value
+        .trim()
+
+    const responseBox =
+      document.getElementById("testerResponse")
+
+    if(!input){
+
+      responseBox.innerHTML = `
+<pre>Parameter required.</pre>
+      `
+
+      return
+
+    }
+
+    responseBox.innerHTML = `
+<div class="loader"></div>
+    `
+
+    try{
+
+      const url =
+        api.endpoint +
+        encodeURIComponent(input)
+
+      // =========================
+      // AUDIO
+      // =========================
+
+      if(api.type === "audio"){
+
+        responseBox.innerHTML = `
+
+<audio
+  controls
+  autoplay
+  style="
+    width:100%;
+    margin-top:10px;
+  "
+>
+  <source src="${url}">
+</audio>
+
+        `
+
+        return
+
+      }
+
+      // =========================
+      // IMAGE
+      // =========================
+
+      if(api.type === "image"){
+
+        responseBox.innerHTML = `
+
+<img
+  src="${url}"
+  style="
+    width:100%;
+    border-radius:18px;
+  "
+>
+
+        `
+
+        return
+
+      }
+
+      // =========================
+      // JSON
+      // =========================
+
+      const req =
+        await fetch(url)
+
+      const json =
+        await req.json()
+
+      responseBox.innerHTML = `
+<pre>${JSON.stringify(json,null,2)}</pre>
+      `
+
+    }catch(err){
+
+      responseBox.innerHTML = `
+<pre>${err.message}</pre>
+      `
+
+    }
+
+  }
+
 }
 
-searchInput.oninput = ()=>{
+// =========================
+// SEARCH
+// =========================
+
+searchInput.addEventListener("input",()=>{
 
   const value =
     searchInput.value
       .toLowerCase()
+      .trim()
+
+  if(!value){
+
+    renderEndpoints(allEndpoints)
+
+    return
+
+  }
 
   const filtered =
     allEndpoints.filter(api=>{
@@ -179,29 +333,46 @@ searchInput.oninput = ()=>{
 
   renderEndpoints(filtered)
 
-}
+})
 
-sidebarButtons.forEach(btn=>{
+// =========================
+// SIDEBAR FILTER
+// =========================
 
-  btn.onclick = ()=>{
+document.addEventListener("click",(e)=>{
 
-    const category =
-      btn.dataset.category
+  const button =
+    e.target.closest(".sidebar-item")
 
-    if(category === "all"){
+  if(!button) return
 
-      renderEndpoints(allEndpoints)
+  const category =
+    button.dataset.category
 
-      return
+  // active menu
 
-    }
+  document
+    .querySelectorAll(".sidebar-item")
+    .forEach(item=>{
+
+      item.classList.remove("active-sidebar")
+
+    })
+
+  button.classList.add("active-sidebar")
+
+  // filter
+
+  if(category === "all"){
+
+    renderEndpoints(allEndpoints)
+
+  }else{
 
     const filtered =
       allEndpoints.filter(api=>{
 
-        return (
-          api.category === category
-        )
+        return api.category === category
 
       })
 
@@ -209,12 +380,20 @@ sidebarButtons.forEach(btn=>{
 
   }
 
+  // auto close sidebar
+
+  sidebar.classList.remove("active")
+  overlay.classList.remove("active")
+
 })
+
+// =========================
+// SIDEBAR
+// =========================
 
 menuBtn.onclick = ()=>{
 
   sidebar.classList.toggle("active")
-
   overlay.classList.toggle("active")
 
 }
@@ -222,19 +401,24 @@ menuBtn.onclick = ()=>{
 overlay.onclick = ()=>{
 
   sidebar.classList.remove("active")
-
   overlay.classList.remove("active")
 
 }
 
+// =========================
+// THEME
+// =========================
+
 themeToggle.onclick = ()=>{
 
-  document.body.classList.toggle(
-    "light-theme"
-  )
+  document.body.classList.toggle("light-theme")
 
 }
+
+// =========================
+// INIT
+// =========================
 
 await loadEndpoints()
 
-}
+})
