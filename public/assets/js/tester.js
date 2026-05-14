@@ -1,63 +1,48 @@
-document.addEventListener(
-  "DOMContentLoaded",
-  ()=>{
+window.onload = async ()=>{
 
-// =======================
-// ELEMENTS
-// =======================
+// ======================
+// ELEMENT
+// ======================
 
 const apiGrid =
-  document.getElementById(
-    "apiGrid"
-  )
+  document.getElementById("apiGrid")
 
 const modal =
-  document.getElementById(
-    "testerModal"
-  )
+  document.getElementById("testerModal")
 
 const searchInput =
-  document.getElementById(
-    "searchInput"
-  )
+  document.getElementById("searchInput")
 
 const sidebar =
-  document.getElementById(
-    "sidebar"
-  )
+  document.getElementById("sidebar")
 
 const overlay =
-  document.getElementById(
-    "sidebarOverlay"
-  )
+  document.getElementById("sidebarOverlay")
 
 const menuBtn =
-  document.getElementById(
-    "menuBtn"
-  )
+  document.getElementById("menuBtn")
 
 const themeToggle =
-  document.getElementById(
-    "themeToggle"
-  )
+  document.getElementById("themeToggle")
+
+const sidebarButtons =
+  document.querySelectorAll(".sidebar-item")
 
 let allEndpoints = []
 
-// =======================
-// LOAD ENDPOINTS
-// =======================
+// ======================
+// FETCH ENDPOINTS
+// ======================
 
 async function loadEndpoints(){
 
   try{
 
-    const response =
-      await fetch(
-        "/data/endpoints.json"
-      )
+    const req =
+      await fetch("/data/endpoints.json")
 
     const data =
-      await response.json()
+      await req.json()
 
     allEndpoints = data
 
@@ -65,69 +50,62 @@ async function loadEndpoints(){
 
   }catch(err){
 
-    console.log(
-      "Failed load endpoints:",
-      err
-    )
+    console.log(err)
 
   }
 
 }
 
-// =======================
-// RENDER ENDPOINTS
-// =======================
+// ======================
+// RENDER
+// ======================
 
 function renderEndpoints(data){
 
   apiGrid.innerHTML = ""
 
-  if(!data.length){
+  if(data.length < 1){
 
     apiGrid.innerHTML = `
-
+    
     <div style="
-      width:100%;
       padding:40px;
+      width:100%;
       text-align:center;
-      color:var(--muted);
-      font-weight:600;
     ">
       Endpoint not found
     </div>
-
+    
     `
 
     return
 
   }
 
-  data.forEach(endpoint=>{
+  data.forEach(api=>{
 
     const card =
-      document.createElement(
-        "div"
-      )
+      document.createElement("div")
 
     card.className =
       "api-card"
 
     card.innerHTML = `
-
+    
       <div class="method">
-        ${endpoint.method}
+        ${api.method}
       </div>
 
       <h3>
-        ${endpoint.name}
+        ${api.name}
       </h3>
 
       <p>
-        ${endpoint.description}
+        ${api.description}
       </p>
 
       <div class="endpoint">
-        ${endpoint.endpoint}${endpoint.param}
+        ${api.endpoint}${api.param}
       </div>
 
       <button class="try-btn">
@@ -137,18 +115,13 @@ function renderEndpoints(data){
     `
 
     const tryBtn =
-      card.querySelector(
-        ".try-btn"
-      )
+      card.querySelector(".try-btn")
 
-    tryBtn.addEventListener(
-      "click",
-      ()=>{
+    tryBtn.onclick = ()=>{
 
-        openTester(endpoint)
+      openTester(api)
 
-      }
-    )
+    }
 
     apiGrid.appendChild(card)
 
@@ -156,17 +129,16 @@ function renderEndpoints(data){
 
 }
 
-// =======================
-// OPEN TESTER
-// =======================
+// ======================
+// TESTER
+// ======================
 
-function openTester(data){
+function openTester(api){
 
-  modal.style.display =
-    "flex"
+  modal.style.display = "flex"
 
   modal.innerHTML = `
-
+  
   <div class="tester-overlay"></div>
 
   <div class="tester-box">
@@ -174,7 +146,7 @@ function openTester(data){
     <div class="tester-header">
 
       <h2>
-        ${data.name}
+        ${api.name}
       </h2>
 
       <button id="closeTester">
@@ -186,7 +158,7 @@ function openTester(data){
     <input
       type="text"
       id="testerInput"
-      placeholder="${data.param}"
+      placeholder="${api.param}"
     >
 
     <button id="executeBtn">
@@ -198,156 +170,114 @@ function openTester(data){
     </div>
 
   </div>
-
+  
   `
 
   const closeTester =
-    document.getElementById(
-      "closeTester"
-    )
+    document.getElementById("closeTester")
 
   const executeBtn =
-    document.getElementById(
-      "executeBtn"
-    )
+    document.getElementById("executeBtn")
 
   const testerOverlay =
-    document.querySelector(
-      ".tester-overlay"
-    )
+    document.querySelector(".tester-overlay")
 
   closeTester.onclick = ()=>{
 
-    modal.style.display =
-      "none"
+    modal.style.display = "none"
 
   }
 
   testerOverlay.onclick = ()=>{
 
-    modal.style.display =
-      "none"
+    modal.style.display = "none"
 
   }
 
-  executeBtn.onclick =
-    async ()=>{
+  executeBtn.onclick = async ()=>{
 
-    const value =
+    const input =
       document
-        .getElementById(
-          "testerInput"
-        )
+        .getElementById("testerInput")
         .value
-        .trim()
 
     const responseBox =
-      document.getElementById(
-        "testerResponse"
-      )
-
-    if(!value){
-
-      responseBox.innerHTML = `
-
-      <pre>
-Please input parameter
-      </pre>
-
-      `
-
-      return
-
-    }
+      document.getElementById("testerResponse")
 
     responseBox.innerHTML = `
-
+    
     <div class="loader"></div>
-
+    
     `
 
     try{
 
       const url =
-        data.endpoint +
-        encodeURIComponent(
-          value
-        )
+        api.endpoint +
+        encodeURIComponent(input)
 
-      // =======================
       // AUDIO
-      // =======================
 
-      if(
-        data.type === "audio"
-      ){
+      if(api.type === "audio"){
 
         responseBox.innerHTML = `
-
+        
         <audio
           controls
           autoplay
           style="
             width:100%;
-            margin-top:10px;
           "
         >
           <source src="${url}">
         </audio>
-
+        
         `
 
         return
 
       }
 
-      // =======================
       // IMAGE
-      // =======================
 
-      if(
-        data.type === "image"
-      ){
+      if(api.type === "image"){
 
         responseBox.innerHTML = `
-
+        
         <img
           src="${url}"
           style="
             width:100%;
             border-radius:20px;
-            margin-top:10px;
           "
         >
-
+        
         `
 
         return
 
       }
 
-      // =======================
       // JSON
-      // =======================
 
-      const response =
+      const req =
         await fetch(url)
 
       const json =
-        await response.json()
+        await req.json()
 
       responseBox.innerHTML = `
-<pre>${JSON.stringify(
-  json,
-  null,
-  2
-)}</pre>
+      
+<pre>${JSON.stringify(json,null,2)}</pre>
+      
       `
 
     }catch(err){
 
       responseBox.innerHTML = `
+      
 <pre>${err.message}</pre>
+      
       `
 
     }
@@ -356,51 +286,48 @@ Please input parameter
 
 }
 
-// =======================
+// ======================
 // SEARCH
-// =======================
+// ======================
 
-function handleSearch(){
+searchInput.oninput = ()=>{
 
   const value =
     searchInput.value
       .toLowerCase()
-      .trim()
 
   if(!value){
 
-    renderEndpoints(
-      allEndpoints
-    )
+    renderEndpoints(allEndpoints)
 
     return
 
   }
 
   const filtered =
-    allEndpoints.filter(item=>{
+    allEndpoints.filter(api=>{
 
       return (
 
-        item.name
+        api.name
           .toLowerCase()
           .includes(value)
 
         ||
 
-        item.description
+        api.description
           .toLowerCase()
           .includes(value)
 
         ||
 
-        item.category
+        api.endpoint
           .toLowerCase()
           .includes(value)
 
         ||
 
-        item.endpoint
+        api.category
           .toLowerCase()
           .includes(value)
 
@@ -412,90 +339,63 @@ function handleSearch(){
 
 }
 
-searchInput.addEventListener(
-  "input",
-  handleSearch
-)
-
-// =======================
+// ======================
 // SIDEBAR FILTER
-// =======================
+// ======================
 
-document
-  .querySelectorAll(
-    ".sidebar-item"
-  )
-  .forEach(button=>{
+sidebarButtons.forEach(btn=>{
 
-  button.addEventListener(
-    "click",
-    ()=>{
+  btn.onclick = ()=>{
 
-      const category =
-        button.dataset.category
+    const category =
+      btn.dataset.category
 
-      if(
-        category === "all"
-      ){
+    if(category === "all"){
 
-        renderEndpoints(
-          allEndpoints
-        )
+      renderEndpoints(allEndpoints)
 
-        return
-
-      }
-
-      const filtered =
-        allEndpoints.filter(item=>{
-
-          return (
-            item.category ===
-            category
-          )
-
-        })
-
-      renderEndpoints(
-        filtered
-      )
+      return
 
     }
-  )
+
+    const filtered =
+      allEndpoints.filter(api=>{
+
+        return (
+          api.category === category
+        )
+
+      })
+
+    renderEndpoints(filtered)
+
+  }
 
 })
 
-// =======================
+// ======================
 // SIDEBAR TOGGLE
-// =======================
+// ======================
 
 menuBtn.onclick = ()=>{
 
-  sidebar.classList.toggle(
-    "active"
-  )
+  sidebar.classList.toggle("active")
 
-  overlay.classList.toggle(
-    "active"
-  )
+  overlay.classList.toggle("active")
 
 }
 
 overlay.onclick = ()=>{
 
-  sidebar.classList.remove(
-    "active"
-  )
+  sidebar.classList.remove("active")
 
-  overlay.classList.remove(
-    "active"
-  )
+  overlay.classList.remove("active")
 
 }
 
-// =======================
-// THEME TOGGLE
-// =======================
+// ======================
+// THEME
+// ======================
 
 themeToggle.onclick = ()=>{
 
@@ -505,10 +405,10 @@ themeToggle.onclick = ()=>{
 
 }
 
-// =======================
+// ======================
 // INIT
-// =======================
+// ======================
 
-loadEndpoints()
+await loadEndpoints()
 
-})
+}
