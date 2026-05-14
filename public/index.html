@@ -2,12 +2,21 @@
 <html lang="en">
 <head>
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
 
-<title>KUROZ4PH API</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>
+  KUROZ4PH API
+</title>
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+/>
 
 <link
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -23,755 +32,890 @@
 }
 
 :root{
-  --bg:#081120;
-  --sidebar:#0d1729;
+
+  --bg:#050816;
   --card:#101b31;
-  --card2:#0f1a2e;
+  --card2:#0b1425;
   --border:#1f2d4a;
-  --text:#f5f7ff;
-  --muted:#8ea0c0;
+  --text:#ffffff;
+  --muted:#94a3b8;
+
   --blue:#4f8cff;
+  --cyan:#00f0ff;
+  --purple:#8b5dff;
+  --pink:#ff4fd8;
+
 }
 
 body{
+
   font-family:'Inter',sans-serif;
-  background:var(--bg);
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(79,140,255,.15),
+      transparent 30%
+    ),
+    var(--bg);
+
   color:var(--text);
-  display:flex;
-  min-height:100vh;
-  overflow:hidden;
+
+  overflow-x:hidden;
+
+}
+
+/* LIGHT MODE */
+
+body.light-theme{
+
+  --bg:#eef3ff;
+  --card:#ffffff;
+  --card2:#f7f9ff;
+  --border:#dbe5ff;
+  --text:#101828;
+  --muted:#667085;
+
 }
 
 /* SIDEBAR */
 
 .sidebar{
-  width:270px;
-  background:var(--sidebar);
-  border-right:1px solid var(--border);
-  padding:24px;
-  display:flex;
-  flex-direction:column;
-  gap:24px;
+
+  position:fixed;
+
+  top:0;
+  left:-320px;
+
+  width:300px;
+  height:100vh;
+
+  background:rgba(5,8,22,.96);
+
+  backdrop-filter:blur(20px);
+
+  border-right:
+    1px solid rgba(255,255,255,.06);
+
+  padding:30px;
+
+  transition:.4s;
+
+  z-index:9999;
+
 }
 
-.logo{
+body.light-theme .sidebar{
+
+  background:rgba(255,255,255,.95);
+
+}
+
+.sidebar.active{
+  left:0;
+}
+
+.sidebar-logo h1{
+
+  font-size:28px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--cyan),
+      var(--purple),
+      var(--pink)
+    );
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
+}
+
+.sidebar-logo p{
+
+  color:var(--muted);
+
+  margin-top:6px;
+
+}
+
+.sidebar-nav{
+
+  margin-top:40px;
+
   display:flex;
-  align-items:center;
+  flex-direction:column;
   gap:14px;
+
 }
 
-.logo-box{
-  width:46px;
-  height:46px;
-  border-radius:16px;
-  background:linear-gradient(
-    135deg,
-    #4f8cff,
-    #7b61ff
-  );
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  font-weight:800;
-}
+.sidebar-nav button{
 
-.logo h2{
-  font-size:18px;
-}
-
-.logo span{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.nav{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.nav button{
   border:none;
-  background:transparent;
-  color:var(--muted);
+
+  background:var(--card);
+
+  color:var(--text);
+
+  padding:16px;
+
+  border-radius:18px;
+
   text-align:left;
-  padding:14px 16px;
-  border-radius:16px;
-  font-size:14px;
-  font-weight:600;
+
   cursor:pointer;
-  transition:.2s;
+
+  font-weight:700;
+
+  transition:.3s;
+
 }
 
-.nav button:hover,
-.nav button.active{
-  background:rgba(79,140,255,.12);
-  color:white;
-}
+.sidebar-nav button:hover{
 
-/* SIDEBAR FOOTER */
+  transform:translateX(5px);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(79,140,255,.2),
+      rgba(139,93,255,.2)
+    );
+
+}
 
 .sidebar-footer{
-  margin-top:auto;
-  background:linear-gradient(
-    135deg,
-    #111f38,
-    #17284b
-  );
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:18px;
-}
 
-.sidebar-footer strong{
-  font-size:15px;
+  position:absolute;
+
+  bottom:40px;
+
 }
 
 .sidebar-footer p{
+
   color:var(--muted);
-  font-size:13px;
-  line-height:1.6;
-  margin-top:8px;
+
+  margin-bottom:10px;
+
 }
 
-/* DEV PROFILE */
+.sidebar-footer a{
 
-.dev-profile{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:20px;
-  padding-top:18px;
-  border-top:1px solid rgba(255,255,255,.08);
-}
+  color:var(--cyan);
 
-.dev-profile img{
-  width:54px;
-  height:54px;
-  border-radius:16px;
-  object-fit:cover;
-}
-
-.dev-profile h4{
-  font-size:15px;
-}
-
-.dev-profile span{
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* SOCIAL */
-
-.dev-social{
-  display:flex;
-  gap:10px;
-  margin-top:18px;
-}
-
-.dev-social a{
-  flex:1;
   text-decoration:none;
-  background:#16233d;
-  border:1px solid var(--border);
-  color:white;
-  text-align:center;
-  padding:12px;
-  border-radius:14px;
-  font-size:13px;
+
   font-weight:700;
-  transition:.2s;
+
 }
 
-.dev-social a:hover{
-  background:#1f3156;
+.sidebar-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,.6);
+
+  backdrop-filter:blur(4px);
+
+  display:none;
+
+  z-index:999;
+
 }
 
-/* MAIN */
-
-.main{
-  flex:1;
-  overflow-y:auto;
-  padding:30px;
+.sidebar-overlay.active{
+  display:block;
 }
 
-/* TOPBAR */
+/* NAVBAR */
 
-.topbar{
+.navbar{
+
+  display:flex;
+
+  justify-content:space-between;
+  align-items:center;
+
+  padding:24px 30px;
+
+}
+
+.nav-left{
+
   display:flex;
   align-items:center;
-  gap:20px;
-  margin-bottom:30px;
+  gap:18px;
+
 }
 
-.search-box{
-  flex:1;
-}
+#menuBtn,
+#themeToggle{
 
-.search-box input{
-  width:100%;
+  border:none;
+
   background:var(--card);
-  border:1px solid var(--border);
-  color:white;
-  padding:18px 20px;
-  border-radius:20px;
-  outline:none;
-  font-size:15px;
-}
 
-.top-actions{
-  display:flex;
-  gap:12px;
-}
+  color:var(--text);
 
-.top-actions button{
-  background:var(--card);
-  border:1px solid var(--border);
-  color:white;
-  padding:14px 18px;
-  border-radius:16px;
+  width:52px;
+  height:52px;
+
+  border-radius:18px;
+
   cursor:pointer;
-  font-weight:700;
+
+  font-size:18px;
+
+}
+
+.logo{
+
+  font-size:22px;
+
+  font-weight:800;
+
+}
+
+.logo span{
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--cyan),
+      var(--purple),
+      var(--pink)
+    );
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
 }
 
 /* HERO */
 
 .hero{
-  background:linear-gradient(
-    135deg,
-    #132443,
-    #0d1728
-  );
-  border:1px solid var(--border);
-  border-radius:34px;
-  padding:40px;
-  margin-bottom:30px;
+
+  padding:
+    70px 30px
+    40px;
+
 }
 
 .hero h1{
-  font-size:48px;
-  line-height:1.1;
-  margin-bottom:16px;
+
+  font-size:70px;
+
+  line-height:1;
+
+  margin-bottom:20px;
+
+  max-width:900px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--cyan),
+      var(--purple),
+      var(--pink)
+    );
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
 }
 
 .hero p{
-  color:var(--muted);
+
+  max-width:760px;
+
   line-height:1.8;
-  max-width:700px;
+
+  color:var(--muted);
+
   font-size:16px;
+
 }
 
-.hero-buttons{
-  display:flex;
-  gap:14px;
-  margin-top:24px;
+/* SEARCH */
+
+.search-wrapper{
+
+  padding:
+    0 30px
+    30px;
+
 }
 
-.hero-buttons button{
-  padding:15px 24px;
-  border:none;
-  border-radius:18px;
-  font-weight:700;
-  cursor:pointer;
-}
+#searchInput{
 
-.btn-primary{
-  background:#4f8cff;
-  color:white;
-}
+  width:100%;
 
-.btn-secondary{
-  background:#16233d;
-  color:white;
-  border:1px solid var(--border);
+  background:var(--card);
+
+  border:
+    1px solid var(--border);
+
+  color:var(--text);
+
+  padding:20px;
+
+  border-radius:22px;
+
+  outline:none;
+
+  font-size:15px;
+
 }
 
 /* STATS */
 
 .stats{
+
   display:grid;
-  grid-template-columns:repeat(
-    auto-fit,
-    minmax(220px,1fr)
-  );
-  gap:18px;
-  margin-bottom:34px;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(220px,1fr)
+    );
+
+  gap:20px;
+
+  padding:
+    0 30px
+    30px;
+
 }
 
 .stat-card{
+
   background:var(--card);
-  border:1px solid var(--border);
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
   border-radius:26px;
-  padding:24px;
+
+  padding:26px;
+
 }
 
 .stat-card span{
+
   color:var(--muted);
-  font-size:13px;
+
 }
 
 .stat-card h2{
-  margin-top:12px;
-  font-size:36px;
-}
 
-/* SECTION */
+  margin-top:10px;
 
-.section-title{
-  margin-bottom:20px;
-}
+  font-size:34px;
 
-.section-title h3{
-  font-size:24px;
 }
 
 /* API GRID */
 
 .api-grid{
+
   display:grid;
-  grid-template-columns:repeat(
-    auto-fill,
-    minmax(300px,1fr)
-  );
-  gap:20px;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(320px,1fr)
+    );
+
+  gap:24px;
+
+  padding:30px;
+
 }
 
 .api-card{
+
   background:var(--card2);
-  border:1px solid var(--border);
-  border-radius:28px;
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  border-radius:30px;
+
   padding:24px;
-  transition:.25s;
+
+  transition:.35s;
+
 }
 
 .api-card:hover{
-  transform:translateY(-5px);
-  border-color:#32589a;
+
+  transform:
+    translateY(-8px)
+    scale(1.01);
+
+  box-shadow:
+    0 0 40px rgba(79,140,255,.18);
+
 }
 
 .method{
+
   display:inline-flex;
-  background:rgba(79,140,255,.12);
-  color:#90b6ff;
-  padding:7px 14px;
+
+  padding:
+    8px 14px;
+
   border-radius:999px;
-  font-size:12px;
+
+  background:
+    rgba(79,140,255,.12);
+
+  color:#9ec2ff;
+
+  font-size:13px;
+
   font-weight:700;
+
   margin-bottom:18px;
+
 }
 
-.api-card h4{
-  font-size:22px;
+.api-card h3{
+
+  font-size:24px;
+
   margin-bottom:10px;
+
 }
 
 .api-card p{
+
   color:var(--muted);
+
   line-height:1.7;
-  font-size:14px;
+
   margin-bottom:16px;
+
 }
 
 .endpoint{
-  background:#0a1322;
-  border:1px solid #1a2741;
-  border-radius:16px;
-  padding:14px;
-  color:#9ec2ff;
-  font-size:13px;
+
+  background:#081120;
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  padding:16px;
+
+  border-radius:18px;
+
+  color:var(--cyan);
+
   word-break:break-all;
+
+  font-size:13px;
+
 }
 
-/* TRY BUTTON */
+body.light-theme .endpoint{
+
+  background:#f4f7ff;
+
+}
 
 .try-btn{
+
   margin-top:18px;
+
   width:100%;
+
   border:none;
-  background:#4f8cff;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--blue),
+      var(--purple)
+    );
+
   color:white;
-  padding:14px;
-  border-radius:14px;
+
+  padding:16px;
+
+  border-radius:18px;
+
   font-weight:700;
+
   cursor:pointer;
+
 }
 
 /* MODAL */
 
 #testerModal{
+
   position:fixed;
+
   inset:0;
+
   display:none;
+
   align-items:center;
   justify-content:center;
-  z-index:9999;
+
+  z-index:99999;
+
 }
 
 .tester-overlay{
+
   position:absolute;
+
   inset:0;
-  background:rgba(0,0,0,.65);
+
+  background:rgba(0,0,0,.7);
+
   backdrop-filter:blur(6px);
+
 }
 
 .tester-box{
-  position:relative;
-  width:95%;
-  max-width:700px;
-  background:#101b31;
-  border:1px solid #1f2d4a;
-  border-radius:32px;
-  padding:28px;
-  z-index:2;
-  animation:popup .2s ease;
-}
 
-@keyframes popup{
-  from{
-    opacity:0;
-    transform:translateY(20px) scale(.96);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0) scale(1);
-  }
+  position:relative;
+
+  width:95%;
+  max-width:720px;
+
+  background:var(--card);
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  border-radius:30px;
+
+  padding:28px;
+
+  z-index:2;
+
 }
 
 .tester-header{
+
   display:flex;
+
   justify-content:space-between;
   align-items:center;
+
   margin-bottom:20px;
+
 }
 
 #closeTester{
-  background:none;
+
   border:none;
-  color:white;
+
+  background:none;
+
+  color:var(--text);
+
   font-size:28px;
+
   cursor:pointer;
+
 }
 
-#testerDesc{
-  color:var(--muted);
-  margin-bottom:20px;
-  line-height:1.7;
-}
+#testerInput{
 
-.tester-input input{
   width:100%;
-  padding:16px;
-  background:#0a1322;
-  border:1px solid #1f2d4a;
-  border-radius:16px;
-  color:white;
-  margin-bottom:16px;
-  outline:none;
+
+  padding:18px;
+
+  background:var(--card2);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:18px;
+
+  color:var(--text);
+
+  margin-bottom:18px;
+
 }
 
 #executeBtn{
+
   width:100%;
+
   border:none;
-  background:#4f8cff;
+
+  padding:18px;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--blue),
+      var(--purple)
+    );
+
   color:white;
-  padding:16px;
-  border-radius:16px;
+
   font-weight:700;
+
   cursor:pointer;
+
 }
 
 #testerResponse{
-  margin-top:22px;
+
+  margin-top:20px;
+
   background:#081120;
+
   border-radius:20px;
-  padding:18px;
-  max-height:420px;
+
+  padding:20px;
+
+  max-height:400px;
+
   overflow:auto;
+
+}
+
+body.light-theme #testerResponse{
+
+  background:#f4f7ff;
+
 }
 
 pre{
+
   white-space:pre-wrap;
   word-break:break-word;
-  line-height:1.7;
+
 }
 
-/* JSON COLORS */
-
-.string{
-  color:#9cdcfe;
-}
-
-.number{
-  color:#b5cea8;
-}
-
-.boolean{
-  color:#569cd6;
-}
-
-.null{
-  color:#ff8080;
-}
-
-.key{
-  color:#4fc1ff;
-}
+.string{color:#9cdcfe}
+.number{color:#b5cea8}
+.boolean{color:#569cd6}
+.null{color:#ff8080}
+.key{color:#4fc1ff}
 
 /* LOADER */
 
 .loader{
-  width:42px;
-  height:42px;
-  border:4px solid #1f2d4a;
-  border-top:4px solid #4f8cff;
+
+  width:40px;
+  height:40px;
+
+  border:
+    4px solid rgba(255,255,255,.1);
+
+  border-top:
+    4px solid var(--cyan);
+
   border-radius:50%;
-  animation:spin 1s linear infinite;
+
   margin:auto;
+
+  animation:spin 1s linear infinite;
+
 }
 
 @keyframes spin{
+
   100%{
     transform:rotate(360deg);
   }
+
 }
 
 /* MOBILE */
 
 @media(max-width:900px){
 
-  body{
-    flex-direction:column;
-    overflow:auto;
-  }
-
-  .sidebar{
-    width:100%;
-    border-right:none;
-    border-bottom:1px solid var(--border);
-  }
-
   .hero h1{
-    font-size:34px;
+    font-size:42px;
   }
 
-  .hero-buttons{
-    flex-direction:column;
+  .api-grid{
+    grid-template-columns:1fr;
   }
 
 }
 
 </style>
-</head>
 
+</head>
 <body>
+
+<div
+  class="sidebar-overlay"
+  id="sidebarOverlay"
+></div>
 
 <!-- SIDEBAR -->
 
-<aside class="sidebar">
+<aside
+  class="sidebar"
+  id="sidebar"
+>
 
-  <div class="logo">
+  <div class="sidebar-logo">
 
-    <div class="logo-box">
-      K
-    </div>
+    <h1>
+      KUROZ4PH
+    </h1>
 
-    <div>
-
-      <h2>
-        KUROZ4PH
-      </h2>
-
-      <span>
-        Developer Portal
-      </span>
-
-    </div>
+    <p>
+      Developer Portal
+    </p>
 
   </div>
 
-  <div class="nav">
+  <div class="sidebar-nav">
 
-    <button class="active">
+    <button>
       Dashboard
     </button>
 
     <button>
-      Downloader
+      Playground
     </button>
 
     <button>
-      AI Tools
+      Analytics
     </button>
 
     <button>
-      Search
+      API Docs
     </button>
 
     <button>
-      Utilities
+      Status
     </button>
 
   </div>
 
-  <!-- FOOTER -->
-
   <div class="sidebar-footer">
 
-    <strong>
-      Production API
-    </strong>
-
     <p>
-      High performance developer API dashboard powered by Node.js & modern infrastructure.
+      Telegram Developer
     </p>
 
-    <div class="dev-profile">
-
-      <img
-        src="https://files.catbox.moe/xhwatz.jpg"
-        alt="Developer"
-      >
-
-      <div>
-
-        <h4>
-          KUROZ4PH
-        </h4>
-
-        <span>
-          API Developer
-        </span>
-
-      </div>
-
-    </div>
-
-    <div class="dev-social">
-
-      <a
-        href="https://t.me/kuroz4ph"
-        target="_blank"
-      >
-        Telegram
-      </a>
-
-      <a
-        href="https://github.com/panggilajanaw"
-        target="_blank"
-      >
-        GitHub
-      </a>
-
-    </div>
+    <a
+      href="https://t.me/kuroz4ph"
+      target="_blank"
+    >
+      @kuroz4ph
+    </a>
 
   </div>
 
 </aside>
 
-<!-- MAIN -->
+<!-- NAVBAR -->
 
-<main class="main">
+<header class="navbar">
 
-  <!-- TOPBAR -->
+  <div class="nav-left">
 
-  <div class="topbar">
+    <button id="menuBtn">
+      ☰
+    </button>
 
-    <div class="search-box">
-
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search endpoints..."
-      >
-
-    </div>
-
-    <div class="top-actions">
-
-      <button>
-        Docs
-      </button>
-
-      <button>
-        Status
-      </button>
-
+    <div class="logo">
+      <span>
+        KUROZ4PH API
+      </span>
     </div>
 
   </div>
 
-  <!-- HERO -->
+  <button id="themeToggle">
+    ☀
+  </button>
 
-  <section class="hero">
+</header>
 
-    <h1>
-      Modern REST API <br>
-      Developer Dashboard
-    </h1>
+<!-- HERO -->
 
-    <p>
-      Powerful developer platform with realtime endpoint testing,
-      interactive API explorer, audio/image/json support,
-      and modern developer infrastructure.
-    </p>
+<section class="hero">
 
-    <div class="hero-buttons">
+  <h1>
+    CYBERPUNK API
+    DEVELOPER DASHBOARD
+  </h1>
 
-      <button class="btn-primary">
-        Explore APIs
-      </button>
+  <p>
 
-      <button class="btn-secondary">
-        API Documentation
-      </button>
+    Futuristic developer platform
+    with realtime endpoint tester,
+    cyberpunk neon interface,
+    modern responsive dashboard,
+    and premium API explorer.
 
-    </div>
+  </p>
 
-  </section>
+</section>
 
-  <!-- STATS -->
+<!-- SEARCH -->
 
-  <section class="stats">
+<section class="search-wrapper">
 
-    <div class="stat-card">
-      <span>Total Endpoints</span>
-      <h2>220</h2>
-    </div>
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search endpoint..."
+  >
 
-    <div class="stat-card">
-      <span>Requests Today</span>
-      <h2>82K</h2>
-    </div>
+</section>
 
-    <div class="stat-card">
-      <span>Average Latency</span>
-      <h2>91ms</h2>
-    </div>
+<!-- STATS -->
 
-    <div class="stat-card">
-      <span>System Uptime</span>
-      <h2>99.9%</h2>
-    </div>
+<section class="stats">
 
-  </section>
-
-  <!-- API SECTION -->
-
-  <div class="section-title">
-
-    <h3>
-      Popular Endpoints
-    </h3>
-
+  <div class="stat-card">
+    <span>Total Endpoints</span>
+    <h2>128</h2>
   </div>
 
-  <section
-    class="api-grid"
-    id="apiGrid"
-  ></section>
+  <div class="stat-card">
+    <span>Requests Today</span>
+    <h2>82K</h2>
+  </div>
 
-</main>
+  <div class="stat-card">
+    <span>Average Latency</span>
+    <h2>91ms</h2>
+  </div>
+
+  <div class="stat-card">
+    <span>System Uptime</span>
+    <h2>99.9%</h2>
+  </div>
+
+</section>
+
+<!-- API GRID -->
+
+<section
+  class="api-grid"
+  id="apiGrid"
+></section>
+
+<!-- TESTER -->
+
+<div id="testerModal"></div>
 
 <script src="/assets/js/tester.js"></script>
 

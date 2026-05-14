@@ -1,93 +1,55 @@
-// public/data/endpoints.json
-
 [
   {
-    "name": "SoundCloud Search",
-    "category": "Music",
-    "method": "GET",
-    "type": "json",
-    "endpoint": "/api/search",
-    "description": "Search SoundCloud tracks",
-    "params": [
-      {
-        "name": "q",
-        "placeholder": "oasis"
-      }
-    ]
+    "name":"SoundCloud Search",
+    "method":"GET",
+    "endpoint":"/api/search?q=",
+    "description":"Search SoundCloud tracks realtime",
+    "type":"json",
+    "param":"oasis"
   },
 
   {
-    "name": "SoundCloud Play",
-    "category": "Music",
-    "method": "GET",
-    "type": "audio",
-    "endpoint": "/api/play",
-    "description": "Stream SoundCloud audio",
-    "params": [
-      {
-        "name": "url",
-        "placeholder": "https://soundcloud.com/xxxx"
-      }
-    ]
+    "name":"Play Music",
+    "method":"GET",
+    "endpoint":"/api/play?url=",
+    "description":"Direct MP3 SoundCloud stream",
+    "type":"audio",
+    "param":"https://soundcloud.com/..."
   },
 
   {
-    "name": "GitHub Stalk",
-    "category": "Tools",
-    "method": "GET",
-    "type": "json",
-    "endpoint": "/api/githubstalk",
-    "description": "Fetch GitHub profile information",
-    "params": [
-      {
-        "name": "user",
-        "placeholder": "torvalds"
-      }
-    ]
+    "name":"QR Generator",
+    "method":"GET",
+    "endpoint":"/api/qr?text=",
+    "description":"Generate QR image instantly",
+    "type":"image",
+    "param":"hello"
   },
 
   {
-    "name": "QR Generator",
-    "category": "Utilities",
-    "method": "GET",
-    "type": "image",
-    "endpoint": "/api/qr",
-    "description": "Generate QR code image",
-    "params": [
-      {
-        "name": "text",
-        "placeholder": "hello"
-      }
-    ]
+    "name":"GitHub Stalker",
+    "method":"GET",
+    "endpoint":"/api/githubstalk?user=",
+    "description":"GitHub profile information",
+    "type":"json",
+    "param":"torvalds"
   },
 
   {
-    "name": "AI CPhoto",
-    "category": "AI",
-    "method": "GET",
-    "type": "image",
-    "endpoint": "/api/cphoto",
-    "description": "Generate AI image",
-    "params": [
-      {
-        "name": "text",
-        "placeholder": "anime girl"
-      }
-    ]
+    "name":"AI CPhoto",
+    "method":"GET",
+    "endpoint":"/api/cphoto?text=",
+    "description":"AI image generator",
+    "type":"image",
+    "param":"anime"
   },
 
   {
-    "name": "Waktu Sholat",
-    "category": "Utilities",
-    "method": "GET",
-    "type": "json",
-    "endpoint": "/api/waktusholat",
-    "description": "Prayer schedule API",
-    "params": [
-      {
-        "name": "zone",
-        "placeholder": "wib"
-      }
-    ]
+    "name":"Waktu Sholat",
+    "method":"GET",
+    "endpoint":"/api/waktusholat?zone=",
+    "description":"Realtime prayer schedule",
+    "type":"json",
+    "param":"wib"
   }
 ]
