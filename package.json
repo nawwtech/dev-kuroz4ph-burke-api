@@ -1,14 +1,15 @@
 {
   "name": "kuroz4ph-api",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "description": "Modern REST API Dashboard",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "node app.js"
   },
   "dependencies": {
     "axios": "^1.7.2",
-    "soundcloud-downloader": "1.0.0",
-    "youtubei.js": "^10.5.0",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "qrcode": "^1.5.4",
     "yt-search": "^2.13.1"

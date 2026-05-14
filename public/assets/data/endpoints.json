@@ -1,0 +1,93 @@
+// public/data/endpoints.json
+
+[
+  {
+    "name": "SoundCloud Search",
+    "category": "Music",
+    "method": "GET",
+    "type": "json",
+    "endpoint": "/api/search",
+    "description": "Search SoundCloud tracks",
+    "params": [
+      {
+        "name": "q",
+        "placeholder": "oasis"
+      }
+    ]
+  },
+
+  {
+    "name": "SoundCloud Play",
+    "category": "Music",
+    "method": "GET",
+    "type": "audio",
+    "endpoint": "/api/play",
+    "description": "Stream SoundCloud audio",
+    "params": [
+      {
+        "name": "url",
+        "placeholder": "https://soundcloud.com/xxxx"
+      }
+    ]
+  },
+
+  {
+    "name": "GitHub Stalk",
+    "category": "Tools",
+    "method": "GET",
+    "type": "json",
+    "endpoint": "/api/githubstalk",
+    "description": "Fetch GitHub profile information",
+    "params": [
+      {
+        "name": "user",
+        "placeholder": "torvalds"
+      }
+    ]
+  },
+
+  {
+    "name": "QR Generator",
+    "category": "Utilities",
+    "method": "GET",
+    "type": "image",
+    "endpoint": "/api/qr",
+    "description": "Generate QR code image",
+    "params": [
+      {
+        "name": "text",
+        "placeholder": "hello"
+      }
+    ]
+  },
+
+  {
+    "name": "AI CPhoto",
+    "category": "AI",
+    "method": "GET",
+    "type": "image",
+    "endpoint": "/api/cphoto",
+    "description": "Generate AI image",
+    "params": [
+      {
+        "name": "text",
+        "placeholder": "anime girl"
+      }
+    ]
+  },
+
+  {
+    "name": "Waktu Sholat",
+    "category": "Utilities",
+    "method": "GET",
+    "type": "json",
+    "endpoint": "/api/waktusholat",
+    "description": "Prayer schedule API",
+    "params": [
+      {
+        "name": "zone",
+        "placeholder": "wib"
+      }
+    ]
+  }
+]
