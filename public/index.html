@@ -31,6 +31,22 @@
 </head>
 <body>
 
+<!-- BACKGROUND ORBS -->
+
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+
+<!-- TOAST -->
+
+<div
+  class="toast"
+  id="toast"
+>
+  Endpoint copied successfully.
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+
 <div
   class="sidebar-overlay"
   id="sidebarOverlay"
@@ -58,7 +74,7 @@
   <div class="sidebar-menu">
 
     <button
-      class="sidebar-item"
+      class="sidebar-item active-sidebar"
       data-category="all"
     >
       Dashboard
@@ -68,21 +84,21 @@
       class="sidebar-item"
       data-category="search"
     >
-      Search
+      Search APIs
     </button>
 
     <button
       class="sidebar-item"
       data-category="downloader"
     >
-      Downloader
+      Downloader APIs
     </button>
 
     <button
       class="sidebar-item"
       data-category="tools"
     >
-      Tools
+      Tools APIs
     </button>
 
     <button
@@ -286,7 +302,31 @@
 
     </div>
 
+    <div class="carousel-card">
+
+      <h3>
+        Interactive Tester
+      </h3>
+
+      <p>
+        Test APIs directly from your dashboard.
+      </p>
+
+    </div>
+
   </div>
+
+</section>
+
+<!-- SEARCH -->
+
+<section class="search-section">
+
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search endpoint..."
+  >
 
 </section>
 
@@ -326,60 +366,6 @@
 
     <h2>
       ONLINE
-    </h2>
-
-  </div>
-
-</section>
-
-<!-- SEARCH -->
-
-<section class="search-section">
-
-  <input
-    type="text"
-    id="searchInput"
-    placeholder="Search endpoint..."
-  >
-
-</section>
-
-<!-- STATS -->
-
-<section class="stats">
-
-  <div class="stat-card">
-
-    <span>
-      Total APIs
-    </span>
-
-    <h2>
-      128
-    </h2>
-
-  </div>
-
-  <div class="stat-card">
-
-    <span>
-      Requests
-    </span>
-
-    <h2>
-      82K
-    </h2>
-
-  </div>
-
-  <div class="stat-card">
-
-    <span>
-      Uptime
-    </span>
-
-    <h2>
-      99.9%
     </h2>
 
   </div>
