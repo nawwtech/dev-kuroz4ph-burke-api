@@ -108,10 +108,16 @@ app.use((req,res)=>{
 
 // ===== START =====
 
-app.listen(PORT,()=>{
+if (require.main === module) {
 
-  console.log(
-    `🚀 Running on ${PORT}`
-  )
+  app.listen(PORT, () => {
 
-})
+    console.log(
+      `🚀 Running on ${PORT}`
+    )
+
+  })
+
+}
+
+module.exports = app
