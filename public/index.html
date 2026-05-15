@@ -31,53 +31,6 @@
 </head>
 <body>
 
-<!-- LOADER -->
-
-<div
-  class="loader-screen"
-  id="loaderScreen"
->
-
-  <div class="loader-logo">
-    KUROZ4PH
-  </div>
-
-  <div class="loader-bar">
-    <div class="loader-progress"></div>
-  </div>
-
-</div>
-
-<!-- PARTICLES -->
-
-<div class="particles">
-
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-
-</div>
-
-<!-- BACKGROUND ORBS -->
-
-<div class="bg-orb orb-1"></div>
-<div class="bg-orb orb-2"></div>
-
-<!-- TOAST -->
-
-<div
-  class="toast"
-  id="toast"
->
-  Endpoint copied successfully.
-</div>
-
-<!-- SIDEBAR OVERLAY -->
-
 <div
   class="sidebar-overlay"
   id="sidebarOverlay"
@@ -92,33 +45,20 @@
 
   <div class="sidebar-top">
 
-    <div class="sidebar-profile">
+    <h1>
+      KUROZ4PH
+    </h1>
 
-      <img
-        src="https://files.catbox.moe/xhwatz.jpg"
-        class="sidebar-avatar"
-      >
-
-      <div>
-
-        <h1>
-          KUROZ4PH
-        </h1>
-
-        <p>
-          Backend Engineer
-        </p>
-
-      </div>
-
-    </div>
+    <p>
+      Backend Engineer
+    </p>
 
   </div>
 
   <div class="sidebar-menu">
 
     <button
-      class="sidebar-item active-sidebar"
+      class="sidebar-item"
       data-category="all"
     >
       Dashboard
@@ -128,21 +68,21 @@
       class="sidebar-item"
       data-category="search"
     >
-      Search APIs
+      Search
     </button>
 
     <button
       class="sidebar-item"
       data-category="downloader"
     >
-      Downloader APIs
+      Downloader
     </button>
 
     <button
       class="sidebar-item"
       data-category="tools"
     >
-      Tools APIs
+      Tools
     </button>
 
     <button
@@ -151,24 +91,6 @@
     >
       AI APIs
     </button>
-
-  </div>
-
-  <!-- SIDEBAR FOOTER -->
-
-  <div class="sidebar-footer">
-
-    <div class="sidebar-footer-card">
-
-      <span>
-        SYSTEM STATUS
-      </span>
-
-      <h3>
-        ALL SERVICES ONLINE
-      </h3>
-
-    </div>
 
   </div>
 
@@ -190,31 +112,6 @@
 
   </div>
 
-  <!-- LIVE STATUS -->
-
-  <div class="top-status">
-
-    <div class="status-chip online-status">
-      ● API ONLINE
-    </div>
-
-    <div class="status-chip">
-      92ms
-    </div>
-
-    <div class="status-chip">
-      v2.4.0
-    </div>
-
-    <div
-      class="status-chip"
-      id="liveClock"
-    >
-      00:00
-    </div>
-
-  </div>
-
   <button id="themeToggle">
     ☀
   </button>
@@ -223,7 +120,7 @@
 
 <!-- HERO -->
 
-<section class="hero reveal">
+<section class="hero">
 
   <div class="hero-grid">
 
@@ -253,48 +150,6 @@
             Building scalable APIs, realtime systems,
             downloader services, AI integrations,
             and advanced automation infrastructure.
-          </p>
-
-        </div>
-
-      </div>
-
-      <!-- MINI STATS -->
-
-      <div class="mini-stats">
-
-        <div class="mini-card">
-
-          <h3>
-            128+
-          </h3>
-
-          <p>
-            Endpoints
-          </p>
-
-        </div>
-
-        <div class="mini-card">
-
-          <h3>
-            99.9%
-          </h3>
-
-          <p>
-            Uptime
-          </p>
-
-        </div>
-
-        <div class="mini-card">
-
-          <h3>
-            82K
-          </h3>
-
-          <p>
-            Requests
           </p>
 
         </div>
@@ -345,9 +200,14 @@
           System connected successfully.
         </div>
 
-        <div class="terminal-line live-terminal">
+        <div class="terminal-line">
           <span class="blue">GET</span>
           /api/search?q=oasis
+        </div>
+
+        <div class="terminal-line">
+          <span class="blue">GET</span>
+          /api/githubstalk?user=torvalds
         </div>
 
         <div class="terminal-line">
@@ -374,15 +234,11 @@
 
 <!-- CAROUSEL -->
 
-<section class="carousel-section reveal">
+<section class="carousel-section">
 
   <div class="carousel-track">
 
     <div class="carousel-card">
-
-      <div class="carousel-icon">
-        ⚡
-      </div>
 
       <h3>
         Realtime APIs
@@ -396,10 +252,6 @@
 
     <div class="carousel-card">
 
-      <div class="carousel-icon">
-        ⬇
-      </div>
-
       <h3>
         Downloader APIs
       </h3>
@@ -411,10 +263,6 @@
     </div>
 
     <div class="carousel-card">
-
-      <div class="carousel-icon">
-        🤖
-      </div>
 
       <h3>
         AI Integrations
@@ -428,10 +276,6 @@
 
     <div class="carousel-card">
 
-      <div class="carousel-icon">
-        📱
-      </div>
-
       <h3>
         Responsive Dashboard
       </h3>
@@ -442,79 +286,13 @@
 
     </div>
 
-    <div class="carousel-card">
-
-      <div class="carousel-icon">
-        🧪
-      </div>
-
-      <h3>
-        Interactive Tester
-      </h3>
-
-      <p>
-        Test APIs directly from your dashboard.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- SEARCH -->
-
-<section class="search-section reveal">
-
-  <div class="search-wrapper">
-
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search endpoint..."
-    >
-
-    <div class="search-icon">
-      🔍
-    </div>
-
-  </div>
-
-</section>
-
-<!-- CATEGORY CHIPS -->
-
-<section class="chips-section reveal">
-
-  <div class="chips-scroll">
-
-    <button class="chip active-chip">
-      All
-    </button>
-
-    <button class="chip">
-      Search
-    </button>
-
-    <button class="chip">
-      AI
-    </button>
-
-    <button class="chip">
-      Downloader
-    </button>
-
-    <button class="chip">
-      Tools
-    </button>
-
   </div>
 
 </section>
 
 <!-- STATS -->
 
-<section class="stats reveal">
+<section class="stats">
 
   <div class="stat-card">
 
@@ -546,7 +324,7 @@
       Status
     </span>
 
-    <h2 class="online-text">
+    <h2>
       ONLINE
     </h2>
 
@@ -554,146 +332,70 @@
 
 </section>
 
-<!-- API USAGE -->
+<!-- SEARCH -->
 
-<section class="usage-section reveal">
+<section class="search-section">
 
-  <div class="usage-card">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search endpoint..."
+  >
 
-    <div class="usage-top">
+</section>
 
-      <h3>
-        API Usage
-      </h3>
+<!-- STATS -->
 
-      <span>
-        realtime
-      </span>
+<section class="stats">
 
-    </div>
+  <div class="stat-card">
 
-    <div class="usage-bars">
+    <span>
+      Total APIs
+    </span>
 
-      <div class="usage-item">
+    <h2>
+      128
+    </h2>
 
-        <p>Mon</p>
+  </div>
 
-        <div class="bar">
-          <span style="width:70%"></span>
-        </div>
+  <div class="stat-card">
 
-      </div>
+    <span>
+      Requests
+    </span>
 
-      <div class="usage-item">
+    <h2>
+      82K
+    </h2>
 
-        <p>Tue</p>
+  </div>
 
-        <div class="bar">
-          <span style="width:95%"></span>
-        </div>
+  <div class="stat-card">
 
-      </div>
+    <span>
+      Uptime
+    </span>
 
-      <div class="usage-item">
-
-        <p>Wed</p>
-
-        <div class="bar">
-          <span style="width:82%"></span>
-        </div>
-
-      </div>
-
-      <div class="usage-item">
-
-        <p>Thu</p>
-
-        <div class="bar">
-          <span style="width:64%"></span>
-        </div>
-
-      </div>
-
-    </div>
+    <h2>
+      99.9%
+    </h2>
 
   </div>
 
 </section>
 
-<!-- LIVE REQUESTS -->
-
-<section class="live-requests reveal">
-
-  <div class="live-card">
-
-    <div class="live-title">
-
-      <h3>
-        Live Requests
-      </h3>
-
-      <div class="live-dot"></div>
-
-    </div>
-
-    <div id="liveRequests">
-
-      <div class="request-item">
-
-        <div>
-
-          <span class="request-method">
-            GET
-          </span>
-
-          /api/search?q=music
-
-        </div>
-
-        <div class="request-status">
-          200
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- API GRID -->
+<!-- GRID -->
 
 <section
-  class="api-grid reveal"
+  class="api-grid"
   id="apiGrid"
 ></section>
 
 <!-- MODAL -->
 
 <div id="testerModal"></div>
-
-<!-- MOBILE FLOAT -->
-
-<div class="mobile-float">
-
-  <button>
-    🏠
-  </button>
-
-  <button>
-    🔍
-  </button>
-
-  <button>
-    ⚡
-  </button>
-
-  <button>
-    ⚙
-  </button>
-
-</div>
 
 <script src="/assets/tester.js"></script>
 
