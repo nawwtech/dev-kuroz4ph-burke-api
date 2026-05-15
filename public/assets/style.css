@@ -1115,3 +1115,748 @@ body.light-theme .navbar{
   }
 
 }
+
+/* =========================
+   FLOATING PARTICLES
+========================= */
+
+.particles{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:-2;
+}
+
+.particles span{
+
+  position:absolute;
+
+  width:8px;
+  height:8px;
+
+  background:rgba(255,255,255,.12);
+
+  border-radius:50%;
+
+  animation:
+    particleFloat linear infinite;
+
+}
+
+.particles span:nth-child(1){
+  left:10%;
+  animation-duration:12s;
+  animation-delay:-2s;
+  top:110%;
+}
+
+.particles span:nth-child(2){
+  left:20%;
+  animation-duration:18s;
+  animation-delay:-4s;
+  top:110%;
+}
+
+.particles span:nth-child(3){
+  left:35%;
+  animation-duration:14s;
+  animation-delay:-1s;
+  top:110%;
+}
+
+.particles span:nth-child(4){
+  left:50%;
+  animation-duration:20s;
+  animation-delay:-5s;
+  top:110%;
+}
+
+.particles span:nth-child(5){
+  left:65%;
+  animation-duration:16s;
+  animation-delay:-3s;
+  top:110%;
+}
+
+.particles span:nth-child(6){
+  left:80%;
+  animation-duration:22s;
+  animation-delay:-7s;
+  top:110%;
+}
+
+.particles span:nth-child(7){
+  left:90%;
+  animation-duration:15s;
+  animation-delay:-2s;
+  top:110%;
+}
+
+@keyframes particleFloat{
+
+  0%{
+    transform:
+      translateY(0)
+      scale(1);
+
+    opacity:0;
+  }
+
+  10%{
+    opacity:1;
+  }
+
+  100%{
+    transform:
+      translateY(-120vh)
+      scale(0);
+
+    opacity:0;
+  }
+
+}
+
+/* =========================
+   GLOW EFFECT
+========================= */
+
+.hero::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:500px;
+  height:500px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(59,130,246,.15),
+      transparent 70%
+    );
+
+  top:-200px;
+  right:-120px;
+
+  filter:blur(40px);
+
+  z-index:-1;
+
+}
+
+/* =========================
+   CARD SHIMMER
+========================= */
+
+.api-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:60%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.06),
+      transparent
+    );
+
+  transform:skewX(-20deg);
+
+}
+
+.api-card:hover::before{
+
+  animation:shine 1s;
+
+}
+
+@keyframes shine{
+
+  100%{
+    left:140%;
+  }
+
+}
+
+/* =========================
+   TERMINAL GLOW
+========================= */
+
+.terminal-card{
+
+  position:relative;
+
+}
+
+.terminal-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:32px;
+
+  box-shadow:
+    0 0 80px rgba(59,130,246,.12);
+
+  pointer-events:none;
+
+}
+
+/* =========================
+   FLOATING ANIMATION
+========================= */
+
+.profile-card,
+.terminal-card,
+.carousel-card,
+.stat-card{
+
+  animation:
+    floating 6s ease-in-out infinite;
+
+}
+
+.terminal-card{
+  animation-delay:1s;
+}
+
+.carousel-card:nth-child(2){
+  animation-delay:2s;
+}
+
+.carousel-card:nth-child(3){
+  animation-delay:3s;
+}
+
+@keyframes floating{
+
+  50%{
+    transform:translateY(-6px);
+  }
+
+}
+
+/* =========================
+   PREMIUM BORDER
+========================= */
+
+.api-card{
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.03),
+      rgba(255,255,255,.01)
+    ),
+    rgba(24,34,51,.8);
+
+}
+
+/* =========================
+   SEARCH GLOW
+========================= */
+
+#searchInput{
+
+  border:1px solid transparent;
+
+}
+
+#searchInput:focus{
+
+  border:1px solid rgba(59,130,246,.45);
+
+  background:rgba(24,34,51,.95);
+
+}
+
+/* =========================
+   BUTTON EFFECT
+========================= */
+
+.try-btn{
+
+  position:relative;
+  overflow:hidden;
+
+}
+
+.try-btn::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:100%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.25),
+      transparent
+    );
+
+}
+
+.try-btn:hover::before{
+
+  animation:buttonShine .9s;
+
+}
+
+@keyframes buttonShine{
+
+  100%{
+    left:140%;
+  }
+
+} 
+
+/* =========================
+   LIVE STATUS CHIPS
+========================= */
+
+.top-status{
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+}
+
+.status-chip{
+
+  background:rgba(255,255,255,.05);
+
+  border:1px solid rgba(255,255,255,.06);
+
+  backdrop-filter:blur(10px);
+
+  padding:10px 14px;
+
+  border-radius:14px;
+
+  font-size:13px;
+  font-weight:600;
+
+  color:var(--text);
+
+}
+
+.online-status{
+
+  color:#4ade80;
+
+  box-shadow:
+    0 0 20px rgba(74,222,128,.15);
+
+}
+
+/* =========================
+   CATEGORY CHIPS
+========================= */
+
+.chips-section{
+
+  padding:0 30px 30px;
+
+}
+
+.chips-scroll{
+
+  display:flex;
+  gap:14px;
+
+  overflow:auto;
+
+  scrollbar-width:none;
+
+}
+
+.chips-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.chip{
+
+  border:none;
+
+  background:rgba(24,34,51,.75);
+
+  color:var(--text);
+
+  border:1px solid rgba(255,255,255,.06);
+
+  padding:14px 20px;
+
+  border-radius:999px;
+
+  cursor:pointer;
+
+  transition:.25s;
+
+  white-space:nowrap;
+
+  backdrop-filter:blur(12px);
+
+}
+
+.chip:hover{
+
+  transform:translateY(-2px);
+
+  background:var(--primary);
+
+}
+
+.active-chip{
+
+  background:var(--primary);
+
+  color:white;
+
+}
+
+/* =========================
+   USAGE SECTION
+========================= */
+
+.usage-section{
+
+  padding:0 30px 30px;
+
+}
+
+.usage-card{
+
+  background:rgba(24,34,51,.75);
+
+  border:1px solid rgba(255,255,255,.06);
+
+  backdrop-filter:blur(18px);
+
+  border-radius:30px;
+
+  padding:28px;
+
+  position:relative;
+
+  overflow:hidden;
+
+}
+
+.usage-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:300px;
+  height:300px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(59,130,246,.12),
+      transparent 70%
+    );
+
+  top:-120px;
+  right:-120px;
+
+}
+
+.usage-top{
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:28px;
+
+}
+
+.usage-top h3{
+
+  font-size:26px;
+
+}
+
+.usage-top span{
+
+  color:#93c5fd;
+
+  font-size:13px;
+  font-weight:700;
+
+  background:rgba(59,130,246,.12);
+
+  padding:8px 14px;
+
+  border-radius:999px;
+
+}
+
+.usage-bars{
+
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+
+}
+
+.usage-item{
+
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+}
+
+.usage-item p{
+
+  font-size:14px;
+  color:var(--muted);
+
+}
+
+.bar{
+
+  width:100%;
+  height:16px;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.06);
+
+  overflow:hidden;
+
+}
+
+.bar span{
+
+  display:block;
+
+  height:100%;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #60a5fa
+    );
+
+  position:relative;
+
+  overflow:hidden;
+
+}
+
+.bar span::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.35),
+      transparent
+    );
+
+  animation:barShine 2s linear infinite;
+
+}
+
+@keyframes barShine{
+
+  0%{
+    transform:translateX(-100%);
+  }
+
+  100%{
+    transform:translateX(200%);
+  }
+
+}
+
+/* =========================
+   API CARD HOVER LIGHT
+========================= */
+
+.api-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:30px;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(96,165,250,.08),
+      transparent 45%
+    );
+
+  opacity:0;
+
+  transition:.3s;
+
+}
+
+.api-card:hover::after{
+
+  opacity:1;
+
+}
+
+/* =========================
+   GLASS EFFECT BOOST
+========================= */
+
+.profile-card,
+.terminal-card,
+.carousel-card,
+.stat-card,
+.api-card,
+.usage-card{
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.04);
+
+}
+
+/* =========================
+   TERMINAL SCANLINE
+========================= */
+
+.terminal-body{
+
+  position:relative;
+
+  overflow:hidden;
+
+}
+
+.terminal-body::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,.02) 50%,
+      transparent 50%
+    );
+
+  background-size:100% 4px;
+
+  pointer-events:none;
+
+  opacity:.18;
+
+}
+
+/* =========================
+   LOGO GLOW
+========================= */
+
+.logo{
+
+  position:relative;
+
+}
+
+.logo::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:100%;
+  height:14px;
+
+  left:0;
+  bottom:-8px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(59,130,246,.45),
+      transparent 70%
+    );
+
+  filter:blur(12px);
+
+}
+
+/* =========================
+   MOBILE IMPROVEMENTS
+========================= */
+
+@media(max-width:768px){
+
+  .top-status{
+
+    display:none;
+
+  }
+
+  .usage-section,
+  .chips-section{
+
+    padding-left:20px;
+    padding-right:20px;
+
+  }
+
+  .usage-card{
+
+    padding:22px;
+
+  }
+
+  .navbar{
+
+    padding:18px 20px;
+
+  }
+
+  .logo{
+
+    font-size:18px;
+
+  }
+
+}
