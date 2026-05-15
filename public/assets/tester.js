@@ -7,34 +7,8 @@ const sidebar = document.getElementById("sidebar")
 const overlay = document.getElementById("sidebarOverlay")
 const menuBtn = document.getElementById("menuBtn")
 const themeToggle = document.getElementById("themeToggle")
-const toast = document.getElementById("toast")
-const liveClock = document.getElementById("liveClock")
 
 let allEndpoints = []
-
-// =========================
-// LIVE CLOCK
-// =========================
-
-function updateClock(){
-
-  if(!liveClock) return
-
-  const now = new Date()
-
-  const time =
-    now.toLocaleTimeString("id-ID",{
-      hour:"2-digit",
-      minute:"2-digit"
-    })
-
-  liveClock.innerText = time
-
-}
-
-setInterval(updateClock,1000)
-
-updateClock()
 
 // =========================
 // LOAD ENDPOINTS
@@ -61,10 +35,8 @@ async function loadEndpoints(){
 
     if(apiCount){
 
-      animateCounter(
-        apiCount,
+      apiCount.innerText =
         data.length
-      )
 
     }
 
@@ -73,79 +45,6 @@ async function loadEndpoints(){
     console.log(err)
 
   }
-
-}
-
-// =========================
-// COUNTER ANIMATION
-// =========================
-
-function animateCounter(el,target){
-
-  let current = 0
-
-  const increment =
-    Math.ceil(target / 30)
-
-  const interval =
-    setInterval(()=>{
-
-      current += increment
-
-      if(current >= target){
-
-        current = target
-
-        clearInterval(interval)
-
-      }
-
-      el.innerText = current
-
-    },25)
-
-}
-
-// =========================
-// TOAST
-// =========================
-
-function showToast(text){
-
-  toast.innerText = text
-
-  toast.classList.add("show")
-
-  setTimeout(()=>{
-
-    toast.classList.remove("show")
-
-  },2200)
-
-}
-
-// =========================
-// FUZZY SEARCH
-// =========================
-
-function fuzzyMatch(text,search){
-
-  text = text.toLowerCase()
-  search = search.toLowerCase()
-
-  let i = 0
-
-  for(const char of text){
-
-    if(char === search[i]){
-
-      i++
-
-    }
-
-  }
-
-  return i === search.length
 
 }
 
@@ -162,15 +61,7 @@ function renderEndpoints(data){
     apiGrid.innerHTML = `
 
       <div class="empty-state">
-
-        <h2>
-          Endpoint not found.
-        </h2>
-
-        <p style="margin-top:10px;">
-          Try another keyword.
-        </p>
-
+        Endpoint not found.
       </div>
 
     `
@@ -179,23 +70,16 @@ function renderEndpoints(data){
 
   }
 
-  data.forEach((api,index)=>{
+  data.forEach(api=>{
 
     const card =
       document.createElement("div")
 
     card.className = "api-card"
 
-    card.style.animationDelay =
-      `${index * .06}s`
-
     card.innerHTML = `
 
       <div class="card-glow"></div>
-
-      <div class="latency">
-        ${Math.floor(Math.random()*80)+20}ms
-      </div>
 
       <div class="method">
         ${api.method}
@@ -217,51 +101,16 @@ function renderEndpoints(data){
         Execute API
       </button>
 
-      <button class="copy-btn">
-        Copy Endpoint
-      </button>
-
     `
 
-    // =========================
-    // EXECUTE BUTTON
-    // =========================
-
-    const executeButton =
+    const button =
       card.querySelector(".try-btn")
 
-    executeButton.addEventListener("click",()=>{
+    button.addEventListener("click",()=>{
 
       openTester(api)
 
     })
-
-    // =========================
-    // COPY BUTTON
-    // =========================
-
-    const copyBtn =
-      card.querySelector(".copy-btn")
-
-    copyBtn.onclick = async ()=>{
-
-      try{
-
-        await navigator.clipboard.writeText(
-          api.endpoint + api.param
-        )
-
-        showToast(
-          "Endpoint copied successfully."
-        )
-
-      }catch(err){
-
-        console.log(err)
-
-      }
-
-    }
 
     apiGrid.appendChild(card)
 
@@ -276,8 +125,6 @@ function renderEndpoints(data){
 function openTester(api){
 
   modal.style.display = "flex"
-
-  document.body.style.overflow = "hidden"
 
   modal.innerHTML = `
 
@@ -316,16 +163,7 @@ function openTester(api){
     </button>
 
     <div id="testerResponse">
-
-      <div style="
-        opacity:.7;
-        line-height:1.8;
-      ">
-
-        Waiting for request...
-
-      </div>
-
+      Response will appear here...
     </div>
 
   </div>
@@ -341,61 +179,25 @@ function openTester(api){
   const testerOverlay =
     document.querySelector(".tester-overlay")
 
-  const testerInput =
-    document.getElementById("testerInput")
-
-  // =========================
-  // CLOSE MODAL
-  // =========================
-
-  function closeModal(){
+  closeBtn.onclick = ()=>{
 
     modal.style.display = "none"
 
-    document.body.style.overflow = ""
-
   }
 
-  closeBtn.onclick = closeModal
+  testerOverlay.onclick = ()=>{
 
-  testerOverlay.onclick = closeModal
+    modal.style.display = "none"
 
-  // =========================
-  // ESC CLOSE
-  // =========================
-
-  document.addEventListener("keydown",(e)=>{
-
-    if(e.key === "Escape"){
-
-      closeModal()
-
-    }
-
-  })
-
-  // =========================
-  // ENTER EXECUTE
-  // =========================
-
-  testerInput.addEventListener("keydown",(event)=>{
-
-    if(event.key === "Enter"){
-
-      executeBtn.click()
-
-    }
-
-  })
-
-  // =========================
-  // EXECUTE API
-  // =========================
+  }
 
   executeBtn.onclick = async ()=>{
 
     const input =
-      testerInput.value.trim()
+      document
+        .getElementById("testerInput")
+        .value
+        .trim()
 
     const responseBox =
       document.getElementById("testerResponse")
@@ -409,11 +211,6 @@ function openTester(api){
       return
 
     }
-
-    executeBtn.disabled = true
-
-    executeBtn.innerText =
-      "Executing..."
 
     responseBox.innerHTML = `
 <div class="loader"></div>
@@ -446,9 +243,6 @@ function openTester(api){
 
         `
 
-        executeBtn.disabled = false
-        executeBtn.innerText = "Execute Endpoint"
-
         return
 
       }
@@ -471,9 +265,6 @@ function openTester(api){
 
         `
 
-        executeBtn.disabled = false
-        executeBtn.innerText = "Execute Endpoint"
-
         return
 
       }
@@ -485,51 +276,12 @@ function openTester(api){
       const req =
         await fetch(url)
 
-      const contentType =
-        req.headers.get("content-type")
+      const json =
+        await req.json()
 
-      // =========================
-      // INVALID RESPONSE
-      // =========================
-
-      if(!req.ok){
-
-        throw new Error(
-          "API request failed."
-        )
-
-      }
-
-      // =========================
-      // JSON RESPONSE
-      // =========================
-
-      if(
-        contentType &&
-        contentType.includes("application/json")
-      ){
-
-        const json =
-          await req.json()
-
-        responseBox.innerHTML = `
+      responseBox.innerHTML = `
 <pre>${JSON.stringify(json,null,2)}</pre>
-        `
-
-      }else{
-
-        const text =
-          await req.text()
-
-        responseBox.innerHTML = `
-<pre>${text}</pre>
-        `
-
-      }
-
-      showToast(
-        "Request executed successfully."
-      )
+      `
 
     }catch(err){
 
@@ -538,11 +290,6 @@ function openTester(api){
       `
 
     }
-
-    executeBtn.disabled = false
-
-    executeBtn.innerText =
-      "Execute Endpoint"
 
   }
 
@@ -580,10 +327,7 @@ searchInput.addEventListener("input",()=>{
       `
       .toLowerCase()
 
-      return (
-        target.includes(value) ||
-        fuzzyMatch(target,value)
-      )
+      return target.includes(value)
 
     })
 
@@ -605,7 +349,7 @@ document.addEventListener("click",(e)=>{
   const category =
     button.dataset.category
 
-  // active sidebar
+  // active menu
 
   document
     .querySelectorAll(".sidebar-item")
@@ -617,7 +361,7 @@ document.addEventListener("click",(e)=>{
 
   button.classList.add("active-sidebar")
 
-  // render
+  // filter
 
   if(category === "all"){
 
@@ -640,52 +384,6 @@ document.addEventListener("click",(e)=>{
 
   sidebar.classList.remove("active")
   overlay.classList.remove("active")
-
-})
-
-// =========================
-// CHIP FILTER
-// =========================
-
-document.addEventListener("click",(e)=>{
-
-  const chip =
-    e.target.closest(".chip")
-
-  if(!chip) return
-
-  document
-    .querySelectorAll(".chip")
-    .forEach(btn=>{
-
-      btn.classList.remove("active-chip")
-
-    })
-
-  chip.classList.add("active-chip")
-
-  const text =
-    chip.innerText
-      .toLowerCase()
-
-  if(text === "all"){
-
-    renderEndpoints(allEndpoints)
-
-    return
-
-  }
-
-  const filtered =
-    allEndpoints.filter(api=>{
-
-      return api.category
-        .toLowerCase()
-        .includes(text)
-
-    })
-
-  renderEndpoints(filtered)
 
 })
 
@@ -715,55 +413,7 @@ themeToggle.onclick = ()=>{
 
   document.body.classList.toggle("light-theme")
 
-  localStorage.setItem(
-    "theme",
-    document.body.classList.contains("light-theme")
-      ? "light"
-      : "dark"
-  )
-
 }
-
-// =========================
-// LOAD THEME
-// =========================
-
-const savedTheme =
-  localStorage.getItem("theme")
-
-if(savedTheme === "light"){
-
-  document.body.classList.add("light-theme")
-
-}
-
-// =========================
-// PARALLAX EFFECT
-// =========================
-
-document.addEventListener("mousemove",(e)=>{
-
-  const cards =
-    document.querySelectorAll(
-      ".api-card,.profile-card,.terminal-card"
-    )
-
-  const x =
-    e.clientX / window.innerWidth
-
-  const y =
-    e.clientY / window.innerHeight
-
-  cards.forEach(card=>{
-
-    card.style.transform = `
-      rotateY(${(x-.5)*4}deg)
-      rotateX(${(y-.5)*-4}deg)
-    `
-
-  })
-
-})
 
 // =========================
 // INIT
