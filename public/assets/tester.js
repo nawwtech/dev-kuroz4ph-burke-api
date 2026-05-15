@@ -7,6 +7,7 @@ const sidebar = document.getElementById("sidebar")
 const overlay = document.getElementById("sidebarOverlay")
 const menuBtn = document.getElementById("menuBtn")
 const themeToggle = document.getElementById("themeToggle")
+const toast = document.getElementById("toast")
 
 let allEndpoints = []
 
@@ -49,6 +50,24 @@ async function loadEndpoints(){
 }
 
 // =========================
+// TOAST
+// =========================
+
+function showToast(text){
+
+  toast.innerText = text
+
+  toast.classList.add("show")
+
+  setTimeout(()=>{
+
+    toast.classList.remove("show")
+
+  },2200)
+
+}
+
+// =========================
 // RENDER ENDPOINTS
 // =========================
 
@@ -81,6 +100,10 @@ function renderEndpoints(data){
 
       <div class="card-glow"></div>
 
+      <div class="latency">
+        ${Math.floor(Math.random()*80)+20}ms
+      </div>
+
       <div class="method">
         ${api.method}
       </div>
@@ -101,16 +124,51 @@ function renderEndpoints(data){
         Execute API
       </button>
 
+      <button class="copy-btn">
+        Copy Endpoint
+      </button>
+
     `
 
-    const button =
+    // =========================
+    // EXECUTE BUTTON
+    // =========================
+
+    const executeButton =
       card.querySelector(".try-btn")
 
-    button.addEventListener("click",()=>{
+    executeButton.addEventListener("click",()=>{
 
       openTester(api)
 
     })
+
+    // =========================
+    // COPY BUTTON
+    // =========================
+
+    const copyBtn =
+      card.querySelector(".copy-btn")
+
+    copyBtn.onclick = async ()=>{
+
+      try{
+
+        await navigator.clipboard.writeText(
+          api.endpoint + api.param
+        )
+
+        showToast(
+          "Endpoint copied successfully."
+        )
+
+      }catch(err){
+
+        console.log(err)
+
+      }
+
+    }
 
     apiGrid.appendChild(card)
 
@@ -179,6 +237,13 @@ function openTester(api){
   const testerOverlay =
     document.querySelector(".tester-overlay")
 
+  const testerInput =
+    document.getElementById("testerInput")
+
+  // =========================
+  // CLOSE MODAL
+  // =========================
+
   closeBtn.onclick = ()=>{
 
     modal.style.display = "none"
@@ -191,13 +256,28 @@ function openTester(api){
 
   }
 
+  // =========================
+  // ENTER EXECUTE
+  // =========================
+
+  testerInput.addEventListener("keydown",(event)=>{
+
+    if(event.key === "Enter"){
+
+      executeBtn.click()
+
+    }
+
+  })
+
+  // =========================
+  // EXECUTE API
+  // =========================
+
   executeBtn.onclick = async ()=>{
 
     const input =
-      document
-        .getElementById("testerInput")
-        .value
-        .trim()
+      testerInput.value.trim()
 
     const responseBox =
       document.getElementById("testerResponse")
@@ -349,7 +429,7 @@ document.addEventListener("click",(e)=>{
   const category =
     button.dataset.category
 
-  // active menu
+  // active sidebar
 
   document
     .querySelectorAll(".sidebar-item")
@@ -361,7 +441,7 @@ document.addEventListener("click",(e)=>{
 
   button.classList.add("active-sidebar")
 
-  // filter
+  // render
 
   if(category === "all"){
 
