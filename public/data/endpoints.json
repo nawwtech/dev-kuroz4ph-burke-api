@@ -1,0 +1,61 @@
+[
+  {
+    "name":"SoundCloud Search",
+    "method":"GET",
+    "endpoint":"/api/search?q=",
+    "description":"Search SoundCloud tracks realtime",
+    "type":"json",
+    "category":"search",
+    "param":"oasis"
+  },
+
+  {
+    "name":"Play Music",
+    "method":"GET",
+    "endpoint":"/api/play?url=",
+    "description":"Direct MP3 SoundCloud stream",
+    "type":"audio",
+    "category":"downloader",
+    "param":"https://soundcloud.com/..."
+  },
+
+  {
+    "name":"QR Generator",
+    "method":"GET",
+    "endpoint":"/api/qr?text=",
+    "description":"Generate QR image instantly",
+    "type":"image",
+    "category":"tools",
+    "param":"hello"
+  },
+
+  {
+    "name":"GitHub Stalker",
+    "method":"GET",
+    "endpoint":"/api/githubstalk?user=",
+    "description":"GitHub profile information",
+    "type":"json",
+    "category":"tools",
+    "param":"torvalds"
+  },
+
+  {
+    "name":"AI CPhoto",
+    "method":"GET",
+    "endpoint":"/api/cphoto?text=",
+    "description":"AI image generator",
+    "type":"image",
+    "category":"ai",
+    "param":"anime"
+  },
+
+  {
+    "name":"Waktu Sholat",
+    "method":"GET",
+    "endpoint":"/api/waktusholat?zone=",
+    "description":"Realtime prayer schedule",
+    "type":"json",
+    "category":"utilities",
+    "param":"wib"
+  }
+]
