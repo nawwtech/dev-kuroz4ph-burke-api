@@ -1860,3 +1860,55 @@ body.light-theme .navbar{
   }
 
 }
+/* =========================
+   FIX MOBILE PROFILE
+========================= */
+
+@media(max-width:768px){
+
+  .profile-top{
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+  }
+
+  .profile-image{
+
+    width:100%;
+    max-width:280px;
+
+    height:auto;
+
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    border-radius:24px;
+
+  }
+
+  .developer-links{
+
+    justify-content:center;
+
+  }
+
+  .developer-links a{
+
+    width:100%;
+
+    text-align:center;
+
+  }
+
+  .profile-card{
+
+    padding:22px;
+
+  }
+
+}
