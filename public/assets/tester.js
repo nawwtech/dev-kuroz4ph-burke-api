@@ -201,7 +201,6 @@ function exportAllToPostman() {
 // =========================
 
 async function loadEndpoints(){
-  // Show skeleton
   apiGrid.innerHTML = `
     <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
     <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
