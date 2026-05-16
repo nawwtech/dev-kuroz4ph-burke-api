@@ -442,7 +442,7 @@
 
 <script src="/assets/tester.js"></script>
 
-<!-- Particle Animation Script -->
+<!-- Particle Animation & Sidebar Script (Theme Toggle REMOVED from here) -->
 <script>
 // Particle background animation
 const canvas = document.getElementById('particleCanvas');
@@ -518,19 +518,24 @@ backToTop.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Theme toggle enhancement
-const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
+// Sidebar functionality (pindah ke sini)
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const menuBtn = document.getElementById('menuBtn');
 
-themeToggle.addEventListener('click', () => {
-  body.classList.toggle('light-theme');
-  const icon = themeToggle.querySelector('i');
-  if (body.classList.contains('light-theme')) {
-    icon.className = 'fas fa-moon';
-  } else {
-    icon.className = 'fas fa-sun';
+if(menuBtn) {
+  menuBtn.onclick = () => {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
   }
-});
+}
+
+if(overlay) {
+  overlay.onclick = () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+}
 
 // Initialize particles
 initParticles();
