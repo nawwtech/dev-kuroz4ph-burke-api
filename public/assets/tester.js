@@ -10,7 +10,6 @@ const themeToggle = document.getElementById("themeToggle")
 
 let allEndpoints = []
 let requestHistory = JSON.parse(localStorage.getItem('api_history') || '[]')
-let currentSearchTerm = ''
 
 // =========================
 // UTILITY FUNCTIONS
@@ -24,16 +23,6 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;')
-}
-
-function escapeRegex(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-}
-
-function highlightText(text, searchTerm) {
-  if (!searchTerm || searchTerm.length < 2) return text
-  const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi')
-  return String(text).replace(regex, '<mark class="highlight">$1</mark>')
 }
 
 function showToast(message, type = 'info') {
@@ -68,17 +57,6 @@ function copyToClipboard(text) {
 
 function formatJSON(json) {
   return JSON.stringify(json, null, 2)
-}
-
-function getRateLimit(category) {
-  const limits = {
-    search: '100 req/min',
-    downloader: '50 req/min',
-    tools: '200 req/min',
-    ai: '30 req/min',
-    utilities: '100 req/min'
-  }
-  return limits[category] || '100 req/min'
 }
 
 function generateCodeSnippet(api, paramValue) {
@@ -161,52 +139,10 @@ function updateHistoryUI() {
 }
 
 // =========================
-// EXPORT ALL TO POSTMAN
-// =========================
-
-function exportAllToPostman() {
-  const collection = {
-    info: {
-      name: "KUROZ4PH API Collection",
-      description: "Complete API collection for KUROZ4PH backend services",
-      schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-    },
-    item: allEndpoints.map(api => ({
-      name: api.name,
-      description: api.description,
-      request: {
-        method: api.method,
-        url: {
-          raw: api.endpoint + "{{param}}",
-          host: [api.endpoint],
-          path: [api.param ? "{{param}}" : ""],
-          variable: [{ key: "param", value: "", description: api.param || "Parameter" }]
-        },
-        description: api.description
-      }
-    }))
-  }
-  
-  const dataStr = JSON.stringify(collection, null, 2)
-  const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr)
-  const linkElement = document.createElement('a')
-  linkElement.setAttribute('href', dataUri)
-  linkElement.setAttribute('download', 'kuroz4ph_api_collection.json')
-  linkElement.click()
-  showToast('All APIs exported to Postman!', 'success')
-}
-
-// =========================
 // LOAD ENDPOINTS
 // =========================
 
 async function loadEndpoints(){
-  apiGrid.innerHTML = `
-    <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
-    <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
-    <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
-  `
-  
   try{
     const req = await fetch("/data/endpoints.json")
     const data = await req.json()
@@ -221,13 +157,6 @@ async function loadEndpoints(){
   }catch(err){
     console.log(err)
     showToast('Failed to load endpoints', 'error')
-    apiGrid.innerHTML = `
-      <div class="empty-state">
-        <i class="fas fa-exclamation-triangle"></i>
-        <h3>Failed to Load APIs</h3>
-        <p>Please check your connection and try again.</p>
-      </div>
-    `
   }
 }
 
@@ -241,7 +170,7 @@ function renderEndpoints(data){
   if(data.length < 1){
     apiGrid.innerHTML = `
       <div class="empty-state">
-        <i class="fas fa-search"></i>
+        <i class="fas fa-search" style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;"></i>
         <h3>No endpoints found</h3>
         <p>Try a different search term or browse all categories.</p>
       </div>
@@ -256,8 +185,6 @@ function renderEndpoints(data){
     card.style.opacity = "0"
     
     const methodClass = api.method.toLowerCase()
-    const highlightedName = currentSearchTerm ? highlightText(api.name, currentSearchTerm) : api.name
-    const highlightedDesc = currentSearchTerm ? highlightText(api.description, currentSearchTerm) : api.description
     
     card.innerHTML = `
       <div class="card-glow"></div>
@@ -265,8 +192,8 @@ function renderEndpoints(data){
         <i class="fas ${api.method === 'GET' ? 'fa-download' : 'fa-exchange-alt'}"></i>
         ${api.method}
       </div>
-      <h3>${highlightedName}</h3>
-      <p>${highlightedDesc}</p>
+      <h3>${escapeHtml(api.name)}</h3>
+      <p>${escapeHtml(api.description)}</p>
       <div class="endpoint">
         <i class="fas fa-link"></i>
         <code>${escapeHtml(api.endpoint)}${escapeHtml(api.param || '')}</code>
@@ -283,10 +210,6 @@ function renderEndpoints(data){
           <i class="fas ${api.type === 'json' ? 'fa-code' : api.type === 'audio' ? 'fa-music' : 'fa-image'}"></i>
           ${api.type}
         </span>
-      </div>
-      <div class="rate-limit-badge">
-        <i class="fas fa-tachometer-alt"></i>
-        Limit: ${getRateLimit(api.category)}
       </div>
       <button class="try-btn">
         <i class="fas fa-play"></i> Execute API
@@ -307,7 +230,7 @@ function renderEndpoints(data){
 }
 
 // =========================
-// OPEN TESTER
+// OPEN TESTER (UPGRADED)
 // =========================
 
 function openTester(api, prefillValue = ''){
@@ -333,9 +256,6 @@ function openTester(api, prefillValue = ''){
     <div class="tester-param-info">
       <i class="fas fa-info-circle"></i>
       <span>Parameter: <code>${escapeHtml(api.param || '')}</code></span>
-      <span class="rate-limit-badge" style="margin-left: auto;">
-        <i class="fas fa-tachometer-alt"></i> ${getRateLimit(api.category)}
-      </span>
     </div>
     
     <div class="tester-input-wrapper">
@@ -507,22 +427,19 @@ function openTester(api, prefillValue = ''){
 }
 
 // =========================
-// SEARCH WITH HIGHLIGHT
+// SEARCH
 // =========================
 
 searchInput.addEventListener("input", () => {
-  currentSearchTerm = searchInput.value.toLowerCase().trim()
-  
-  if(!currentSearchTerm){
+  const value = searchInput.value.toLowerCase().trim()
+  if(!value){
     renderEndpoints(allEndpoints)
     return
   }
-  
   const filtered = allEndpoints.filter(api => {
     const target = `${api.name} ${api.description} ${api.category} ${api.endpoint}`.toLowerCase()
-    return target.includes(currentSearchTerm)
+    return target.includes(value)
   })
-  
   renderEndpoints(filtered)
 })
 
@@ -542,12 +459,8 @@ document.addEventListener("click", (e) => {
   button.classList.add("active-sidebar")
   
   if(category === "all"){
-    currentSearchTerm = ''
-    searchInput.value = ''
     renderEndpoints(allEndpoints)
   }else{
-    currentSearchTerm = ''
-    searchInput.value = ''
     const filtered = allEndpoints.filter(api => api.category === category)
     renderEndpoints(filtered)
   }
@@ -559,7 +472,7 @@ document.addEventListener("click", (e) => {
 })
 
 // =========================
-// THEME with localStorage
+// THEME with localStorage (FIXED!)
 // =========================
 
 function initTheme() {
@@ -590,12 +503,6 @@ if(themeToggle) {
   }
 }
 
-// Export all button
-const exportAllBtn = document.getElementById('exportAllBtn')
-if (exportAllBtn) {
-  exportAllBtn.onclick = () => exportAllToPostman()
-}
-
 // Escape key handler
 document.addEventListener("keydown", (e) => {
   if(e.key === "Escape" && modal.style.display === "flex") {
@@ -610,10 +517,95 @@ document.addEventListener("keydown", (e) => {
 })
 
 // =========================
+// ADD CSS STYLES
+// =========================
+
+const style = document.createElement('style')
+style.textContent = `
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .toast-notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--card);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100000;
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+  }
+  .toast-notification.show { transform: translateX(-50%) translateY(0); }
+  .toast-success { border-left: 4px solid #22c55e; }
+  .toast-error { border-left: 4px solid #ef4444; }
+  .toast-info { border-left: 4px solid #3b82f6; }
+  
+  .method-get { background: rgba(34,197,94,0.12); color: #22c55e; }
+  .endpoint { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .copy-endpoint { background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: 0.25s; }
+  .copy-endpoint:hover { background: var(--primary); color: white; }
+  
+  .api-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; }
+  .tag-search { background: rgba(59,130,246,0.12); color: #60a5fa; }
+  .tag-downloader { background: rgba(34,197,94,0.12); color: #22c55e; }
+  .tag-tools { background: rgba(245,158,11,0.12); color: #f59e0b; }
+  .tag-ai { background: rgba(168,85,247,0.12); color: #a855f7; }
+  .tag-type { background: rgba(100,116,139,0.12); color: var(--muted); }
+  
+  .tester-param-info { padding: 10px 14px; background: rgba(59,130,246,0.08); border-radius: 12px; margin: 16px 0; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .tester-input-wrapper { margin: 16px 0; }
+  .tester-input-wrapper input { width: 100%; padding: 16px; border: none; border-radius: 16px; background: var(--card2); color: var(--text); font-family: monospace; }
+  
+  .response-header { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; font-size: 13px; color: var(--muted); }
+  .copy-response-btn, .export-postman-btn { background: none; border: none; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; }
+  .copy-response-btn:hover, .export-postman-btn:hover { background: rgba(59,130,246,0.1); }
+  
+  .response-placeholder { text-align: center; padding: 40px; color: var(--muted); }
+  .response-loading { text-align: center; padding: 40px; }
+  .loader { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .response-error { text-align: center; padding: 30px; color: #ef4444; }
+  .response-json pre { background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; overflow-x: auto; font-size: 12px; max-height: 400px; }
+  .response-audio { text-align: center; padding: 20px; }
+  .response-image img { width: 100%; border-radius: 16px; max-height: 400px; object-fit: contain; }
+  .image-actions { display: flex; gap: 10px; margin-top: 16px; justify-content: center; }
+  .image-action-btn { background: var(--card2); border: none; padding: 10px 20px; border-radius: 12px; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .image-action-btn:hover { background: var(--primary); color: white; }
+  
+  .code-snippets-section { margin-top: 20px; }
+  .section-divider { margin: 20px 0 15px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .code-tabs { display: flex; gap: 10px; margin-bottom: 10px; }
+  .code-tab { background: var(--card2); border: none; padding: 8px 16px; border-radius: 10px; color: var(--text); cursor: pointer; transition: 0.25s; }
+  .code-tab.active { background: var(--primary); color: white; }
+  .code-pre { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; overflow-x: auto; margin: 10px 0; }
+  .code-pre code { font-family: monospace; font-size: 12px; }
+  .copy-code-btn { width: 100%; padding: 10px; border: none; border-radius: 10px; background: var(--primary); color: white; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  
+  .active-sidebar { background: var(--primary) !important; color: white !important; }
+  
+  @media (max-width: 768px) {
+    .tester-box { margin: 20px; max-height: 90vh; overflow-y: auto; }
+    .code-pre { font-size: 10px; }
+  }
+`
+
+document.head.appendChild(style)
+
+// =========================
 // INIT
 // =========================
 
-initTheme()
+initTheme()  // Panggil initTheme sebelum loadEndpoints
 await loadEndpoints()
 
 })
