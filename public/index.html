@@ -107,7 +107,7 @@
       </div>
     </div>
 
-    <!-- TERMINAL + CHART -->
+    <!-- TERMINAL -->
     <div class="terminal-card">
       <div class="terminal-header">
         <div class="terminal-dots"><span></span><span></span><span></span></div>
@@ -172,9 +172,8 @@
   <div class="stat-card"><span>Uptime</span><h2>99.9%</h2></div>
 </section>
 
-<!-- API GRID WITH SKELETON -->
+<!-- API GRID -->
 <section class="api-grid" id="apiGrid">
-  <!-- Skeleton akan muncul pertama kali -->
   <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
   <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
   <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
@@ -188,7 +187,6 @@
 
 <script src="/assets/tester.js"></script>
 
-<!-- Script tambahan -->
 <script>
 // Particle background
 const canvas = document.getElementById('particleCanvas');
@@ -298,7 +296,7 @@ closeBanner.onclick = () => {
   localStorage.setItem('bannerClosed', 'true');
 }
 
-// Chart.js - Response time chart
+// Chart.js
 let responseChart;
 const chartData = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -345,7 +343,6 @@ function initChart() {
   }
 }
 
-// Update chart theme when theme changes
 const observer = new MutationObserver(() => {
   if (responseChart) {
     const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
@@ -355,7 +352,6 @@ const observer = new MutationObserver(() => {
 });
 observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-// Initialize
 initParticles();
 initChart();
 </script>
