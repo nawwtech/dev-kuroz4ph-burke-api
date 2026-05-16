@@ -8,7 +8,6 @@
     "category":"search",
     "param":"oasis"
   },
-
   {
     "name":"Play Music",
     "method":"GET",
@@ -18,7 +17,6 @@
     "category":"downloader",
     "param":"https://soundcloud.com/..."
   },
-
   {
     "name":"QR Generator",
     "method":"GET",
@@ -28,7 +26,6 @@
     "category":"tools",
     "param":"hello"
   },
-
   {
     "name":"GitHub Stalker",
     "method":"GET",
@@ -38,7 +35,6 @@
     "category":"tools",
     "param":"torvalds"
   },
-
   {
     "name":"AI CPhoto",
     "method":"GET",
@@ -48,7 +44,6 @@
     "category":"ai",
     "param":"anime"
   },
-
   {
     "name":"Waktu Sholat",
     "method":"GET",
