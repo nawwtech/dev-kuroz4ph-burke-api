@@ -10,7 +10,7 @@
 />
 
 <title>
-  KUROZ4PH API
+  KUROZ4PH API - Professional Backend Services
 </title>
 
 <link
@@ -28,8 +28,17 @@
   rel="stylesheet"
 />
 
+<!-- Additional Font for Elegance -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 <body>
+
+<!-- ANIMATED BACKGROUND PARTICLES -->
+<canvas id="particleCanvas"></canvas>
 
 <div
   class="sidebar-overlay"
@@ -44,6 +53,10 @@
 >
 
   <div class="sidebar-top">
+
+    <div class="sidebar-logo">
+      <i class="fas fa-code"></i>
+    </div>
 
     <h1>
       KUROZ4PH
@@ -61,6 +74,7 @@
       class="sidebar-item"
       data-category="all"
     >
+      <i class="fas fa-tachometer-alt"></i>
       Dashboard
     </button>
 
@@ -68,6 +82,7 @@
       class="sidebar-item"
       data-category="search"
     >
+      <i class="fas fa-search"></i>
       Search
     </button>
 
@@ -75,6 +90,7 @@
       class="sidebar-item"
       data-category="downloader"
     >
+      <i class="fas fa-download"></i>
       Downloader
     </button>
 
@@ -82,6 +98,7 @@
       class="sidebar-item"
       data-category="tools"
     >
+      <i class="fas fa-tools"></i>
       Tools
     </button>
 
@@ -89,9 +106,17 @@
       class="sidebar-item"
       data-category="ai"
     >
+      <i class="fas fa-brain"></i>
       AI APIs
     </button>
 
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="status-indicator">
+      <span class="status-dot"></span>
+      System Online
+    </div>
   </div>
 
 </aside>
@@ -102,19 +127,22 @@
 
   <div class="nav-left">
 
-    <button id="menuBtn">
-      ☰
+    <button id="menuBtn" class="icon-btn">
+      <i class="fas fa-bars"></i>
     </button>
 
     <div class="logo">
+      <i class="fas fa-cloud-upload-alt"></i>
       KUROZ4PH API
     </div>
 
   </div>
 
-  <button id="themeToggle">
-    ☀
-  </button>
+  <div class="nav-right">
+    <button id="themeToggle" class="icon-btn">
+      <i class="fas fa-sun"></i>
+    </button>
+  </div>
 
 </header>
 
@@ -126,18 +154,20 @@
 
     <!-- PROFILE -->
 
-    <div class="profile-card">
+    <div class="profile-card glass-effect">
 
       <div class="profile-top">
 
         <img
           src="https://files.catbox.moe/xhwatz.jpg"
           class="profile-image"
+          alt="KUROZ4PH Profile"
         >
 
         <div>
 
           <span class="developer-badge">
+            <i class="fas fa-crown"></i>
             Backend Engineer
           </span>
 
@@ -161,11 +191,14 @@
         <a
           href="https://t.me/kuroz4ph"
           target="_blank"
+          class="telegram-link"
         >
+          <i class="fab fa-telegram"></i>
           Telegram Developer
         </a>
 
-        <a href="#apiGrid">
+        <a href="#apiGrid" class="explore-link">
+          <i class="fas fa-rocket"></i>
           Explore APIs
         </a>
 
@@ -188,6 +221,7 @@
         </div>
 
         <p>
+          <i class="fas fa-terminal"></i>
           LIVE TERMINAL
         </p>
 
@@ -236,10 +270,15 @@
 
 <section class="carousel-section">
 
+  <div class="section-header">
+    <h2>Featured Services</h2>
+    <p>Premium API solutions for modern applications</p>
+  </div>
+
   <div class="carousel-track">
 
     <div class="carousel-card">
-
+      <i class="fas fa-bolt carousel-icon"></i>
       <h3>
         Realtime APIs
       </h3>
@@ -247,11 +286,10 @@
       <p>
         Fast and scalable backend systems.
       </p>
-
     </div>
 
     <div class="carousel-card">
-
+      <i class="fas fa-music carousel-icon"></i>
       <h3>
         Downloader APIs
       </h3>
@@ -259,11 +297,10 @@
       <p>
         Audio and social media services.
       </p>
-
     </div>
 
     <div class="carousel-card">
-
+      <i class="fas fa-robot carousel-icon"></i>
       <h3>
         AI Integrations
       </h3>
@@ -271,11 +308,10 @@
       <p>
         Modern image and utility systems.
       </p>
-
     </div>
 
     <div class="carousel-card">
-
+      <i class="fas fa-chart-line carousel-icon"></i>
       <h3>
         Responsive Dashboard
       </h3>
@@ -283,7 +319,6 @@
       <p>
         Smooth experience for all devices.
       </p>
-
     </div>
 
   </div>
@@ -336,11 +371,14 @@
 
 <section class="search-section">
 
-  <input
-    type="text"
-    id="searchInput"
-    placeholder="Search endpoint..."
-  >
+  <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search endpoint..."
+    >
+  </div>
 
 </section>
 
@@ -397,7 +435,106 @@
 
 <div id="testerModal"></div>
 
+<!-- FLOATING BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
 <script src="/assets/tester.js"></script>
+
+<!-- Particle Animation Script -->
+<script>
+// Particle background animation
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+
+let particles = [];
+let animationId;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function createParticles() {
+  const particleCount = Math.min(50, Math.floor(window.innerWidth / 30));
+  particles = [];
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2 + 1,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random() * 0.3 + 0.1
+    });
+  }
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  particles.forEach(particle => {
+    ctx.beginPath();
+    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`;
+    ctx.fill();
+    
+    particle.x += particle.speedX;
+    particle.y += particle.speedY;
+    
+    if (particle.x < 0) particle.x = canvas.width;
+    if (particle.x > canvas.width) particle.x = 0;
+    if (particle.y < 0) particle.y = canvas.height;
+    if (particle.y > canvas.height) particle.y = 0;
+  });
+  
+  animationId = requestAnimationFrame(drawParticles);
+}
+
+function initParticles() {
+  resizeCanvas();
+  createParticles();
+  drawParticles();
+}
+
+window.addEventListener('resize', () => {
+  resizeCanvas();
+  createParticles();
+});
+
+// Back to top button
+const backToTop = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) {
+    backToTop.classList.add('visible');
+  } else {
+    backToTop.classList.remove('visible');
+  }
+});
+
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Theme toggle enhancement
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+themeToggle.addEventListener('click', () => {
+  body.classList.toggle('light-theme');
+  const icon = themeToggle.querySelector('i');
+  if (body.classList.contains('light-theme')) {
+    icon.className = 'fas fa-moon';
+  } else {
+    icon.className = 'fas fa-sun';
+  }
+});
+
+// Initialize particles
+initParticles();
+</script>
 
 </body>
 </html>
