@@ -3,113 +3,67 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
 <title>
   KUROZ4PH API - Professional Backend Services
 </title>
 
-<link
-  rel="stylesheet"
-  href="/assets/style.css"
-/>
+<link rel="stylesheet" href="/assets/style.css"/>
 
-<link
-  rel="preconnect"
-  href="https://fonts.googleapis.com"
-/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-  rel="stylesheet"
-/>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
-<!-- Additional Font for Elegance -->
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 </head>
 <body>
 
-<!-- ANIMATED BACKGROUND PARTICLES -->
+<!-- ANNOUNCEMENT BANNER -->
+<div id="announcementBanner" class="announcement-banner">
+  <div class="announcement-content">
+    <i class="fas fa-bullhorn"></i>
+    <span>📢 Server maintenance every Sunday 02:00 - 03:00 GMT.</span>
+  </div>
+  <button id="closeBanner" class="close-banner"><i class="fas fa-times"></i></button>
+</div>
+
+<!-- PARTICLES CANVAS -->
 <canvas id="particleCanvas"></canvas>
 
-<div
-  class="sidebar-overlay"
-  id="sidebarOverlay"
-></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- SIDEBAR -->
-
-<aside
-  class="sidebar"
-  id="sidebar"
->
-
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
-
     <div class="sidebar-logo">
       <i class="fas fa-code"></i>
     </div>
-
-    <h1>
-      KUROZ4PH
-    </h1>
-
-    <p>
-      Backend Engineer
-    </p>
-
+    <h1>KUROZ4PH</h1>
+    <p>Backend Engineer</p>
   </div>
 
   <div class="sidebar-menu">
-
-    <button
-      class="sidebar-item"
-      data-category="all"
-    >
-      <i class="fas fa-tachometer-alt"></i>
-      Dashboard
+    <button class="sidebar-item" data-category="all">
+      <i class="fas fa-tachometer-alt"></i> Dashboard
     </button>
-
-    <button
-      class="sidebar-item"
-      data-category="search"
-    >
-      <i class="fas fa-search"></i>
-      Search
+    <button class="sidebar-item" data-category="search">
+      <i class="fas fa-search"></i> Search
     </button>
-
-    <button
-      class="sidebar-item"
-      data-category="downloader"
-    >
-      <i class="fas fa-download"></i>
-      Downloader
+    <button class="sidebar-item" data-category="downloader">
+      <i class="fas fa-download"></i> Downloader
     </button>
-
-    <button
-      class="sidebar-item"
-      data-category="tools"
-    >
-      <i class="fas fa-tools"></i>
-      Tools
+    <button class="sidebar-item" data-category="tools">
+      <i class="fas fa-tools"></i> Tools
     </button>
-
-    <button
-      class="sidebar-item"
-      data-category="ai"
-    >
-      <i class="fas fa-brain"></i>
-      AI APIs
+    <button class="sidebar-item" data-category="ai">
+      <i class="fas fa-brain"></i> AI APIs
     </button>
-
   </div>
 
   <div class="sidebar-footer">
@@ -118,336 +72,127 @@
       System Online
     </div>
   </div>
-
 </aside>
 
 <!-- NAVBAR -->
-
 <header class="navbar">
-
   <div class="nav-left">
-
-    <button id="menuBtn" class="icon-btn">
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="logo">
-      <i class="fas fa-cloud-upload-alt"></i>
-      KUROZ4PH API
-    </div>
-
+    <button id="menuBtn" class="icon-btn"><i class="fas fa-bars"></i></button>
+    <div class="logo"><i class="fas fa-cloud-upload-alt"></i> KUROZ4PH API</div>
   </div>
-
   <div class="nav-right">
-    <button id="themeToggle" class="icon-btn">
-      <i class="fas fa-sun"></i>
+    <button id="exportAllBtn" class="icon-btn" title="Export All to Postman">
+      <i class="fas fa-file-export"></i>
     </button>
+    <button id="themeToggle" class="icon-btn"><i class="fas fa-sun"></i></button>
   </div>
-
 </header>
 
 <!-- HERO -->
-
 <section class="hero">
-
   <div class="hero-grid">
-
     <!-- PROFILE -->
-
     <div class="profile-card glass-effect">
-
       <div class="profile-top">
-
-        <img
-          src="https://files.catbox.moe/xhwatz.jpg"
-          class="profile-image"
-          alt="KUROZ4PH Profile"
-        >
-
+        <img src="https://files.catbox.moe/xhwatz.jpg" class="profile-image" alt="KUROZ4PH Profile">
         <div>
-
-          <span class="developer-badge">
-            <i class="fas fa-crown"></i>
-            Backend Engineer
-          </span>
-
-          <h1>
-            KUROZ4PH
-          </h1>
-
-          <p>
-            API Developer & Modern Backend Architect.
-            Building scalable APIs, realtime systems,
-            downloader services, AI integrations,
-            and advanced automation infrastructure.
-          </p>
-
+          <span class="developer-badge"><i class="fas fa-crown"></i> Backend Engineer</span>
+          <h1>KUROZ4PH</h1>
+          <p>API Developer & Modern Backend Architect. Building scalable APIs, realtime systems, downloader services, AI integrations, and advanced automation infrastructure.</p>
         </div>
-
       </div>
-
       <div class="developer-links">
-
-        <a
-          href="https://t.me/kuroz4ph"
-          target="_blank"
-          class="telegram-link"
-        >
-          <i class="fab fa-telegram"></i>
-          Telegram Developer
-        </a>
-
-        <a href="#apiGrid" class="explore-link">
-          <i class="fas fa-rocket"></i>
-          Explore APIs
-        </a>
-
+        <a href="https://t.me/kuroz4ph" target="_blank" class="telegram-link"><i class="fab fa-telegram"></i> Telegram Developer</a>
+        <a href="#apiGrid" class="explore-link"><i class="fas fa-rocket"></i> Explore APIs</a>
       </div>
-
     </div>
 
-    <!-- TERMINAL -->
-
+    <!-- TERMINAL + CHART -->
     <div class="terminal-card">
-
       <div class="terminal-header">
-
-        <div class="terminal-dots">
-
-          <span></span>
-          <span></span>
-          <span></span>
-
-        </div>
-
-        <p>
-          <i class="fas fa-terminal"></i>
-          LIVE TERMINAL
-        </p>
-
+        <div class="terminal-dots"><span></span><span></span><span></span></div>
+        <p><i class="fas fa-terminal"></i> LIVE TERMINAL</p>
       </div>
-
       <div class="terminal-body">
-
-        <div class="terminal-line">
-          <span class="green">✔</span>
-          System connected successfully.
-        </div>
-
-        <div class="terminal-line">
-          <span class="blue">GET</span>
-          /api/search?q=oasis
-        </div>
-
-        <div class="terminal-line">
-          <span class="blue">GET</span>
-          /api/githubstalk?user=torvalds
-        </div>
-
-        <div class="terminal-line">
-          <span class="purple">AI</span>
-          Image generation initialized.
-        </div>
-
-        <div class="terminal-line">
-          <span class="yellow">SYS</span>
-          Monitoring realtime requests.
-        </div>
-
-        <div class="terminal-line blink">
-          root@kuroz4ph:~$
-        </div>
-
+        <div class="terminal-line"><span class="green">✔</span> System connected successfully.</div>
+        <div class="terminal-line"><span class="blue">GET</span> /api/search?q=oasis</div>
+        <div class="terminal-line"><span class="blue">GET</span> /api/githubstalk?user=torvalds</div>
+        <div class="terminal-line"><span class="purple">AI</span> Image generation initialized.</div>
+        <div class="terminal-line"><span class="yellow">SYS</span> Monitoring realtime requests.</div>
+        <div class="terminal-line blink">root@kuroz4ph:~$</div>
       </div>
-
     </div>
-
   </div>
+</section>
 
+<!-- RESPONSE TIME CHART SECTION -->
+<section class="chart-section">
+  <div class="section-header">
+    <h2><i class="fas fa-chart-line"></i> API Analytics</h2>
+    <p>Real-time response time monitoring (last 7 days)</p>
+  </div>
+  <div class="chart-container">
+    <canvas id="responseChart"></canvas>
+  </div>
 </section>
 
 <!-- CAROUSEL -->
-
 <section class="carousel-section">
-
   <div class="section-header">
     <h2>Featured Services</h2>
     <p>Premium API solutions for modern applications</p>
   </div>
-
   <div class="carousel-track">
-
-    <div class="carousel-card">
-      <i class="fas fa-bolt carousel-icon"></i>
-      <h3>
-        Realtime APIs
-      </h3>
-
-      <p>
-        Fast and scalable backend systems.
-      </p>
-    </div>
-
-    <div class="carousel-card">
-      <i class="fas fa-music carousel-icon"></i>
-      <h3>
-        Downloader APIs
-      </h3>
-
-      <p>
-        Audio and social media services.
-      </p>
-    </div>
-
-    <div class="carousel-card">
-      <i class="fas fa-robot carousel-icon"></i>
-      <h3>
-        AI Integrations
-      </h3>
-
-      <p>
-        Modern image and utility systems.
-      </p>
-    </div>
-
-    <div class="carousel-card">
-      <i class="fas fa-chart-line carousel-icon"></i>
-      <h3>
-        Responsive Dashboard
-      </h3>
-
-      <p>
-        Smooth experience for all devices.
-      </p>
-    </div>
-
+    <div class="carousel-card"><i class="fas fa-bolt carousel-icon"></i><h3>Realtime APIs</h3><p>Fast and scalable backend systems.</p></div>
+    <div class="carousel-card"><i class="fas fa-music carousel-icon"></i><h3>Downloader APIs</h3><p>Audio and social media services.</p></div>
+    <div class="carousel-card"><i class="fas fa-robot carousel-icon"></i><h3>AI Integrations</h3><p>Modern image and utility systems.</p></div>
+    <div class="carousel-card"><i class="fas fa-chart-line carousel-icon"></i><h3>Responsive Dashboard</h3><p>Smooth experience for all devices.</p></div>
   </div>
-
 </section>
 
 <!-- STATS -->
-
 <section class="stats">
-
-  <div class="stat-card">
-
-    <span>
-      Total APIs
-    </span>
-
-    <h2 id="apiCount">
-      0
-    </h2>
-
-  </div>
-
-  <div class="stat-card">
-
-    <span>
-      Categories
-    </span>
-
-    <h2>
-      6
-    </h2>
-
-  </div>
-
-  <div class="stat-card">
-
-    <span>
-      Status
-    </span>
-
-    <h2>
-      ONLINE
-    </h2>
-
-  </div>
-
+  <div class="stat-card"><span>Total APIs</span><h2 id="apiCount">0</h2></div>
+  <div class="stat-card"><span>Categories</span><h2>6</h2></div>
+  <div class="stat-card"><span>Status</span><h2>ONLINE</h2></div>
 </section>
 
 <!-- SEARCH -->
-
 <section class="search-section">
-
   <div class="search-container">
     <i class="fas fa-search search-icon"></i>
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search endpoint..."
-    >
+    <input type="text" id="searchInput" placeholder="Search endpoint... (Ctrl+K)">
   </div>
-
 </section>
 
-<!-- STATS -->
-
+<!-- STATS 2 -->
 <section class="stats">
-
-  <div class="stat-card">
-
-    <span>
-      Total APIs
-    </span>
-
-    <h2>
-      128
-    </h2>
-
-  </div>
-
-  <div class="stat-card">
-
-    <span>
-      Requests
-    </span>
-
-    <h2>
-      82K
-    </h2>
-
-  </div>
-
-  <div class="stat-card">
-
-    <span>
-      Uptime
-    </span>
-
-    <h2>
-      99.9%
-    </h2>
-
-  </div>
-
+  <div class="stat-card"><span>Total APIs</span><h2>128</h2></div>
+  <div class="stat-card"><span>Requests</span><h2>82K</h2></div>
+  <div class="stat-card"><span>Uptime</span><h2>99.9%</h2></div>
 </section>
 
-<!-- GRID -->
-
-<section
-  class="api-grid"
-  id="apiGrid"
-></section>
+<!-- API GRID WITH SKELETON -->
+<section class="api-grid" id="apiGrid">
+  <!-- Skeleton akan muncul pertama kali -->
+  <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
+  <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
+  <div class="skeleton-card"><div class="skeleton shimmer"></div></div>
+</section>
 
 <!-- MODAL -->
-
 <div id="testerModal"></div>
 
-<!-- FLOATING BACK TO TOP BUTTON -->
-<button id="backToTop" class="back-to-top">
-  <i class="fas fa-arrow-up"></i>
-</button>
+<!-- BACK TO TOP -->
+<button id="backToTop" class="back-to-top"><i class="fas fa-arrow-up"></i></button>
 
 <script src="/assets/tester.js"></script>
 
-<!-- Particle Animation & Sidebar Script (Theme Toggle REMOVED from here) -->
+<!-- Script tambahan -->
 <script>
-// Particle background animation
+// Particle background
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
-
 let particles = [];
 let animationId;
 
@@ -473,22 +218,18 @@ function createParticles() {
 
 function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
   particles.forEach(particle => {
     ctx.beginPath();
     ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`;
     ctx.fill();
-    
     particle.x += particle.speedX;
     particle.y += particle.speedY;
-    
     if (particle.x < 0) particle.x = canvas.width;
     if (particle.x > canvas.width) particle.x = 0;
     if (particle.y < 0) particle.y = canvas.height;
     if (particle.y > canvas.height) particle.y = 0;
   });
-  
   animationId = requestAnimationFrame(drawParticles);
 }
 
@@ -503,42 +244,120 @@ window.addEventListener('resize', () => {
   createParticles();
 });
 
-// Back to top button
+// Back to top
 const backToTop = document.getElementById('backToTop');
-
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 300) {
-    backToTop.classList.add('visible');
-  } else {
-    backToTop.classList.remove('visible');
-  }
+  backToTop.classList.toggle('visible', window.scrollY > 300);
 });
-
 backToTop.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Sidebar functionality (pindah ke sini)
+// Sidebar
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebarOverlay');
 const menuBtn = document.getElementById('menuBtn');
 
-if(menuBtn) {
-  menuBtn.onclick = () => {
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-  }
+menuBtn.onclick = () => {
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
 }
 
-if(overlay) {
-  overlay.onclick = () => {
+overlay.onclick = () => {
+  sidebar.classList.remove('active');
+  overlay.classList.remove('active');
+}
+
+// Swipe to close sidebar (mobile)
+let touchStartX = 0;
+let touchEndX = 0;
+
+sidebar.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+sidebar.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchEndX - touchStartX > 50) {
     sidebar.classList.remove('active');
     overlay.classList.remove('active');
   }
+});
+
+// Close banner
+const banner = document.getElementById('announcementBanner');
+const closeBanner = document.getElementById('closeBanner');
+const bannerClosed = localStorage.getItem('bannerClosed');
+
+if (bannerClosed === 'true') {
+  banner.style.display = 'none';
 }
 
-// Initialize particles
+closeBanner.onclick = () => {
+  banner.style.display = 'none';
+  localStorage.setItem('bannerClosed', 'true');
+}
+
+// Chart.js - Response time chart
+let responseChart;
+const chartData = {
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  datasets: [{
+    label: 'Avg Response Time (ms)',
+    data: [124, 118, 135, 112, 108, 95, 102],
+    borderColor: '#3b82f6',
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    fill: true,
+    tension: 0.4,
+    pointBackgroundColor: '#3b82f6',
+    pointBorderColor: '#fff',
+    pointRadius: 4,
+    pointHoverRadius: 6
+  }]
+};
+
+function initChart() {
+  const ctx = document.getElementById('responseChart')?.getContext('2d');
+  if (ctx) {
+    responseChart = new Chart(ctx, {
+      type: 'line',
+      data: chartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: getComputedStyle(document.body).getPropertyValue('--text').trim() }
+          }
+        },
+        scales: {
+          y: {
+            grid: { color: 'rgba(100, 116, 139, 0.1)' },
+            title: { display: true, text: 'Response Time (ms)' }
+          },
+          x: {
+            grid: { display: false },
+            title: { display: true, text: 'Day' }
+          }
+        }
+      }
+    });
+  }
+}
+
+// Update chart theme when theme changes
+const observer = new MutationObserver(() => {
+  if (responseChart) {
+    const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
+    responseChart.options.plugins.legend.labels.color = textColor;
+    responseChart.update();
+  }
+});
+observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+// Initialize
 initParticles();
+initChart();
 </script>
 
 </body>
