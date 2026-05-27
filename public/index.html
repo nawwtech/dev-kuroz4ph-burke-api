@@ -7,10 +7,8 @@
 <title>KUROZ4PH NEXUS API - Professional Backend Services</title>
 
 <link rel="stylesheet" href="/assets/style.css">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
@@ -33,7 +31,8 @@
   </div>
 
   <div class="sidebar-menu">
-    <button class="sidebar-item" data-category="all">
+    <div class="sidebar-menu-label">Navigation</div>
+    <button class="sidebar-item active-sidebar" data-category="all">
       <i class="fas fa-tachometer-alt"></i>
       Dashboard
     </button>
@@ -52,6 +51,11 @@
     <button class="sidebar-item" data-category="ai">
       <i class="fas fa-brain"></i>
       AI APIs
+    </button>
+    <div class="sidebar-menu-label" style="margin-top:12px">System</div>
+    <button class="sidebar-item" data-category="utilities">
+      <i class="fas fa-cog"></i>
+      Utilities
     </button>
   </div>
 
@@ -72,12 +76,18 @@
       <i class="fas fa-bars"></i>
     </button>
     <div class="logo">
-      <i class="fas fa-cloud-upload-alt"></i>
-      KUROZ4PH API
+      <div class="logo-icon">
+        <i class="fas fa-cloud-upload-alt"></i>
+      </div>
+      <span class="logo-text">KUROZ4PH API</span>
     </div>
   </div>
 
   <div class="nav-right">
+    <span class="nav-badge">
+      <i class="fas fa-circle" style="font-size:6px; margin-right:4px;"></i>
+      LIVE
+    </span>
     <button id="themeToggle" class="icon-btn">
       <i class="fas fa-sun"></i>
     </button>
@@ -92,9 +102,13 @@
 
     <!-- PROFILE -->
     <div class="profile-card glass-effect">
+      <div class="profile-card-bg"></div>
 
       <div class="profile-top">
-        <img src="https://files.catbox.moe/xhwatz.jpg" class="profile-image" alt="KUROZ4PH Profile">
+        <div class="profile-image-wrap">
+          <img src="https://files.catbox.moe/xhwatz.jpg" class="profile-image" alt="KUROZ4PH Profile">
+          <div class="profile-online"></div>
+        </div>
         <div>
           <span class="developer-badge">
             <i class="fas fa-crown"></i>
@@ -102,7 +116,7 @@
           </span>
           <h1>KUROZ4PH</h1>
           <p>
-            API Developer & Modern Backend Architect.
+            API Developer &amp; Modern Backend Architect.
             Building scalable APIs, realtime systems,
             downloader services, AI integrations,
             and advanced automation infrastructure.
@@ -141,23 +155,23 @@
       <div class="terminal-body">
         <div class="terminal-line">
           <span class="green">✔</span>
-          System connected successfully.
+          <span class="line-text">System connected successfully.</span>
         </div>
         <div class="terminal-line">
           <span class="blue">GET</span>
-          /api/search?q=oasis
+          <span class="line-text">/api/search?q=oasis</span>
         </div>
         <div class="terminal-line">
           <span class="blue">GET</span>
-          /api/githubstalk?user=torvalds
+          <span class="line-text">/api/githubstalk?user=torvalds</span>
         </div>
         <div class="terminal-line">
           <span class="purple">AI</span>
-          Image generation initialized.
+          <span class="line-text">Image generation initialized.</span>
         </div>
         <div class="terminal-line">
           <span class="yellow">SYS</span>
-          Monitoring realtime requests.
+          <span class="line-text">Monitoring realtime requests.</span>
         </div>
         <div class="terminal-line blink">
           root@kuroz4ph:~$
@@ -174,30 +188,39 @@
 <section class="carousel-section">
 
   <div class="section-header">
+    <span class="section-header-eyebrow">// services</span>
     <h2>Featured Services</h2>
     <p>Premium API solutions for modern applications</p>
   </div>
 
   <div class="carousel-track">
     <div class="carousel-card">
-      <i class="fas fa-bolt carousel-icon"></i>
+      <div class="carousel-icon-wrap">
+        <i class="fas fa-bolt carousel-icon"></i>
+      </div>
       <h3>Realtime APIs</h3>
-      <p>Fast and scalable backend systems.</p>
+      <p>Fast and scalable backend systems built for production.</p>
     </div>
     <div class="carousel-card">
-      <i class="fas fa-music carousel-icon"></i>
+      <div class="carousel-icon-wrap" style="background: rgba(0,229,156,0.08); border-color: rgba(0,229,156,0.15);">
+        <i class="fas fa-music carousel-icon" style="color: var(--green);"></i>
+      </div>
       <h3>Downloader APIs</h3>
-      <p>Audio and social media services.</p>
+      <p>Audio and social media download services.</p>
     </div>
     <div class="carousel-card">
-      <i class="fas fa-robot carousel-icon"></i>
+      <div class="carousel-icon-wrap" style="background: rgba(124,109,240,0.1); border-color: rgba(124,109,240,0.15);">
+        <i class="fas fa-robot carousel-icon" style="color: var(--accent);"></i>
+      </div>
       <h3>AI Integrations</h3>
-      <p>Modern image and utility systems.</p>
+      <p>Modern image generation and utility systems.</p>
     </div>
     <div class="carousel-card">
-      <i class="fas fa-chart-line carousel-icon"></i>
+      <div class="carousel-icon-wrap" style="background: rgba(240,192,64,0.08); border-color: rgba(240,192,64,0.15);">
+        <i class="fas fa-chart-line carousel-icon" style="color: var(--yellow);"></i>
+      </div>
       <h3>Responsive Dashboard</h3>
-      <p>Smooth experience for all devices.</p>
+      <p>Smooth experience across all devices.</p>
     </div>
   </div>
 
@@ -218,7 +241,7 @@
 
   <div class="stat-card">
     <span>Status</span>
-    <h2>ONLINE</h2>
+    <h2 class="stat-online">ONLINE</h2>
   </div>
 
 </section>
@@ -228,7 +251,8 @@
 
   <div class="search-container">
     <i class="fas fa-search search-icon"></i>
-    <input type="text" id="searchInput" placeholder="Search endpoint...">
+    <input type="text" id="searchInput" placeholder="Search endpoint, category...">
+    <span class="search-shortcut">⌘K</span>
   </div>
 
 </section>
@@ -252,6 +276,12 @@
   </div>
 
 </section>
+
+<!-- API GRID HEADER -->
+<div class="api-grid-header">
+  <span class="api-grid-title">// endpoints</span>
+  <span class="api-grid-count" id="gridCount">Loading...</span>
+</div>
 
 <!-- GRID -->
 <section class="api-grid" id="apiGrid"></section>
@@ -286,10 +316,11 @@ function createParticles() {
     particles.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      radius: Math.random() * 2 + 1,
-      speedX: (Math.random() - 0.5) * 0.5,
-      speedY: (Math.random() - 0.5) * 0.5,
-      opacity: Math.random() * 0.3 + 0.1
+      radius: Math.random() * 1.5 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.4,
+      speedY: (Math.random() - 0.5) * 0.4,
+      opacity: Math.random() * 0.25 + 0.05,
+      hue: Math.random() > 0.6 ? 170 : 255  // cyan or purple
     });
   }
 }
@@ -300,7 +331,10 @@ function drawParticles() {
   particles.forEach(particle => {
     ctx.beginPath();
     ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(99, 102, 241, ${particle.opacity})`;
+    const color = particle.hue === 170
+      ? `rgba(0, 229, 200, ${particle.opacity})`
+      : `rgba(124, 109, 240, ${particle.opacity})`;
+    ctx.fillStyle = color;
     ctx.fill();
     
     particle.x += particle.speedX;
@@ -358,6 +392,23 @@ if(overlay) {
     sidebar.classList.remove('active');
     overlay.classList.remove('active');
   }
+}
+
+// Update grid count label
+const origRender = window.__origRender;
+function updateGridCount(count) {
+  const gc = document.getElementById('gridCount');
+  if(gc) gc.textContent = count + ' endpoints';
+}
+
+// Observe apiGrid mutations to update count
+const apiGridEl = document.getElementById('apiGrid');
+if(apiGridEl) {
+  const obs = new MutationObserver(() => {
+    const cards = apiGridEl.querySelectorAll('.api-card');
+    updateGridCount(cards.length);
+  });
+  obs.observe(apiGridEl, { childList: true });
 }
 
 // Initialize particles
