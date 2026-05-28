@@ -6,624 +6,453 @@
 <title>KUROZ4PH NEXUS API — Developer Platform</title>
 <link rel="stylesheet" href="/assets/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
+<!-- PARTICLES -->
 <canvas id="particleCanvas"></canvas>
+
+<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- ═══ SIDEBAR ═══ -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-inner">
-
-    <div class="sidebar-brand-row">
-      <div class="sidebar-logo-wrap">
-        <div class="sidebar-logo-box"><i class="fas fa-code"></i></div>
-        <span class="sidebar-logo-title">Kuroz<span>API</span></span>
-      </div>
-      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+<!-- ──── TOP STATUS BAR ──── -->
+<div class="status-bar">
+  <div class="status-bar-left">
+    <div class="sb-item">
+      <span class="sb-dot"></span>
+      All systems operational
     </div>
-
-    <div class="sidebar-nav">
-      <div class="sidebar-nav-label">Menu</div>
-      <button class="sidebar-item active-sidebar" data-category="all" onclick="scrollToGrid()">
-        <i class="fas fa-th-large"></i>
-        Dashboard
-        <span class="sidebar-item-count" id="sidebarCountAll">—</span>
-      </button>
-      <button class="sidebar-item" onclick="window.open('https://t.me/kuroz4ph','_blank')">
-        <i class="fas fa-comment-dots"></i>
-        Chat AI
-      </button>
-      <button class="sidebar-item" data-category="all" onclick="scrollToGrid()">
-        <i class="fas fa-book"></i>
-        Documentation
-      </button>
-      <button class="sidebar-item" onclick="document.getElementById('trafficSection').scrollIntoView({behavior:'smooth'})">
-        <i class="fas fa-terminal"></i>
-        Live Console
-      </button>
-      <button class="sidebar-item" onclick="document.getElementById('systemStatus').scrollIntoView({behavior:'smooth'})">
-        <i class="fas fa-chart-bar"></i>
-        System Status
-      </button>
-      <button class="sidebar-item" onclick="window.open('https://t.me/kuroz4ph','_blank')">
-        <i class="fas fa-cloud-upload-alt"></i>
-        Uploader
-      </button>
-
-      <div class="sidebar-nav-label" style="margin-top:8px;">Categories</div>
-      <button class="sidebar-item" data-category="search">
-        <i class="fas fa-search"></i>
-        Search
-        <span class="sidebar-item-count" id="sc-search">—</span>
-      </button>
-      <button class="sidebar-item" data-category="downloader">
-        <i class="fas fa-download"></i>
-        Downloader
-        <span class="sidebar-item-count" id="sc-downloader">—</span>
-      </button>
-      <button class="sidebar-item" data-category="tools">
-        <i class="fas fa-wrench"></i>
-        Tools
-        <span class="sidebar-item-count" id="sc-tools">—</span>
-      </button>
-      <button class="sidebar-item" data-category="ai">
-        <i class="fas fa-microchip"></i>
-        AI APIs
-        <span class="sidebar-item-count" id="sc-ai">—</span>
-      </button>
-      <button class="sidebar-item" data-category="utilities">
-        <i class="fas fa-sliders-h"></i>
-        Utilities
-        <span class="sidebar-item-count" id="sc-utilities">—</span>
-      </button>
+    <div class="sb-item">
+      <i class="fas fa-server"></i>
+      api.kuroz4ph.dev
     </div>
-
-    <div class="sidebar-footer">
-      <div class="sidebar-status">
-        <span class="status-dot"></span>
-        System Online · 99.9% uptime
-      </div>
-      <div class="sidebar-footer-links">
-        <a href="#" class="sidebar-footer-link">Docs</a>
-        <a href="#" class="sidebar-footer-link">Status</a>
-        <a href="https://t.me/kuroz4ph" target="_blank" class="sidebar-footer-link">Support</a>
-      </div>
-    </div>
-
   </div>
+  <div class="status-bar-right">
+    <div class="sb-item">
+      <i class="fas fa-clock"></i>
+      <span id="sbTime">—</span>
+    </div>
+    <span class="sb-version">v2.4.1</span>
+  </div>
+</div>
+
+<!-- ──── SIDEBAR ──── -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-top">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">
+        <i class="fas fa-code"></i>
+      </div>
+      <div class="sidebar-brand-text">
+        <h1>KUROZ4PH</h1>
+        <span>Backend Engineer</span>
+      </div>
+    </div>
+    <div class="sidebar-search">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Filter categories..." id="sidebarFilter">
+    </div>
+  </div>
+
+  <div class="sidebar-menu">
+    <div class="sidebar-section-label">Overview</div>
+    <button class="sidebar-item active-sidebar" data-category="all">
+      <i class="fas fa-th-large"></i>
+      All Endpoints
+      <span class="sidebar-item-count" id="sidebarCountAll">—</span>
+    </button>
+
+    <div class="sidebar-section-label" style="margin-top:10px;">Categories</div>
+    <button class="sidebar-item" data-category="search">
+      <i class="fas fa-search"></i>
+      Search
+      <span class="sidebar-item-count">1</span>
+    </button>
+    <button class="sidebar-item" data-category="downloader">
+      <i class="fas fa-download"></i>
+      Downloader
+      <span class="sidebar-item-count">1</span>
+    </button>
+    <button class="sidebar-item" data-category="tools">
+      <i class="fas fa-wrench"></i>
+      Tools
+      <span class="sidebar-item-count">2</span>
+    </button>
+    <button class="sidebar-item" data-category="ai">
+      <i class="fas fa-microchip"></i>
+      AI APIs
+      <span class="sidebar-item-count">1</span>
+    </button>
+    <button class="sidebar-item" data-category="utilities">
+      <i class="fas fa-sliders-h"></i>
+      Utilities
+      <span class="sidebar-item-count">1</span>
+    </button>
+
+    <div class="sidebar-section-label" style="margin-top:10px;">Resources</div>
+    <button class="sidebar-item" onclick="window.open('https://t.me/kuroz4ph','_blank')">
+      <i class="fab fa-telegram"></i>
+      Telegram
+    </button>
+    <button class="sidebar-item" onclick="document.getElementById('searchInput').focus()">
+      <i class="fas fa-terminal"></i>
+      API Explorer
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="status-indicator">
+      <span class="status-dot"></span>
+      System Online
+    </div>
+    <div class="sidebar-footer-links">
+      <a href="#" class="sidebar-footer-link">Docs</a>
+      <a href="#" class="sidebar-footer-link">Changelog</a>
+      <a href="https://t.me/kuroz4ph" target="_blank" class="sidebar-footer-link">Support</a>
+    </div>
+  </div>
+
 </aside>
 
-<!-- ═══ NAVBAR ═══ -->
+<!-- ──── NAVBAR ──── -->
 <header class="navbar">
   <div class="nav-left">
-    <button id="menuBtn" class="menu-fab icon-btn">
-      <i class="fas fa-bars"></i>
+    <button id="menuBtn" class="icon-btn" title="Toggle sidebar">
+      <i class="fas fa-sidebar" style="font-size:12px;"></i>
     </button>
     <div class="logo">
-      <div class="logo-icon"><i class="fas fa-code"></i></div>
-      <span class="logo-title">Kuroz<span>API</span></span>
+      <div class="logo-mark">
+        <i class="fas fa-cloud-upload-alt"></i>
+      </div>
+      <span class="logo-title">KUROZ4PH</span>
+      <span class="logo-slash">/</span>
+      <span class="logo-sub">nexus-api</span>
+    </div>
+    <div class="nav-path">
+      <i class="fas fa-layer-group" style="font-size:10px;"></i>
+      <span>endpoints</span>
+      <i class="fas fa-chevron-right" style="font-size:8px;"></i>
+      <span class="path-active" id="navCurrentCategory">all</span>
     </div>
   </div>
+
   <div class="nav-right">
     <div class="nav-pill online">
       <i class="fas fa-circle"></i>
-      Online
+      Operational
     </div>
-    <button id="themeToggle" class="icon-btn" title="Toggle dark mode">
-      <i class="fas fa-moon"></i>
+    <button id="themeToggle" class="icon-btn" title="Toggle theme">
+      <i class="fas fa-sun"></i>
     </button>
   </div>
 </header>
 
-<!-- ═══ MAIN CONTENT ═══ -->
-<main class="main-content">
+<!-- ──── HERO ──── -->
+<section class="hero">
+  <div class="hero-grid">
 
-  <!-- HERO / GREETING -->
-  <section class="hero">
+    <!-- Profile Card -->
+    <div class="profile-card glass-effect">
+      <div class="profile-card-accent"></div>
+      <div class="profile-card-glow"></div>
 
-    <div class="greeting-row">
-      <h1 id="greetingText">Good Morning, <span>Developer</span></h1>
-      <p class="greeting-sub">Your dashboard is ready. Explore all available API endpoints below.</p>
-    </div>
+      <div class="profile-top">
+        <div class="profile-img-wrap">
+          <img src="https://files.catbox.moe/xhwatz.jpg" class="profile-image" alt="KUROZ4PH">
+          <div class="profile-status-dot"></div>
+        </div>
+        <div class="profile-meta">
+          <span class="developer-badge">
+            <i class="fas fa-code"></i>
+            Backend Engineer
+          </span>
+          <h1>KUROZ4PH</h1>
+          <p>API Developer &amp; Modern Backend Architect. Building scalable APIs, realtime systems, downloader services, AI integrations, and advanced automation infrastructure.</p>
+        </div>
+      </div>
 
-    <!-- Banner -->
-    <div class="hero-banner">
-      <img src="https://files.catbox.moe/xhwatz.jpg" class="hero-banner-img" alt="Banner">
-      <div class="hero-banner-overlay">
-        <h2>Build something great!</h2>
-        <p>Unlock the power of high-performance APIs for your next project.</p>
-        <a href="#apiGrid" class="btn-primary">
-          <i class="fas fa-rocket"></i>
-          Get Started
+      <div class="profile-stats-row">
+        <div class="profile-stat">
+          <span class="profile-stat-num" id="apiCount">0</span>
+          <span class="profile-stat-label">Endpoints</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-num">6</span>
+          <span class="profile-stat-label">Categories</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-num">99.9%</span>
+          <span class="profile-stat-label">Uptime</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-num">82K</span>
+          <span class="profile-stat-label">Requests</span>
+        </div>
+      </div>
+
+      <div class="developer-links">
+        <a href="https://t.me/kuroz4ph" target="_blank" class="telegram-link">
+          <i class="fab fa-telegram"></i>
+          Telegram Developer
+        </a>
+        <a href="#apiGrid" class="explore-link">
+          <i class="fas fa-arrow-right"></i>
+          Explore APIs
         </a>
       </div>
     </div>
 
-  </section>
-
-  <!-- STATS 2×2 -->
-  <section class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-card-top">
-        <div class="stat-icon blue"><i class="fas fa-bolt"></i></div>
-        <span class="stat-label">Total Endpoints</span>
-      </div>
-      <div class="stat-value" id="apiCount">—</div>
-      <div class="stat-sub">Active API routes</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-top">
-        <div class="stat-icon green"><i class="fas fa-layer-group"></i></div>
-        <span class="stat-label">Categories</span>
-      </div>
-      <div class="stat-value">6</div>
-      <div class="stat-sub">API groups</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-top">
-        <div class="stat-icon purple"><i class="fas fa-database"></i></div>
-        <span class="stat-label">Total Requests</span>
-      </div>
-      <div class="stat-value">82K</div>
-      <div class="stat-sub">Lifetime served</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-top">
-        <div class="stat-icon amber"><i class="fas fa-tachometer-alt"></i></div>
-        <span class="stat-label">Avg Latency</span>
-      </div>
-      <div class="stat-value">&lt;200ms</div>
-      <div class="stat-sub">Server response time</div>
-    </div>
-  </section>
-
-  <!-- SYSTEM STATUS -->
-  <section id="systemStatus" style="padding:0 22px 20px; position:relative; z-index:1;">
-    <div class="section-title">System Status</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-      <div class="stat-card">
-        <div class="stat-card-top">
-          <div class="stat-icon blue"><i class="fas fa-server"></i></div>
-          <span class="stat-label">API Service</span>
+    <!-- Terminal Card -->
+    <div class="terminal-card">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span></span><span></span><span></span>
         </div>
-        <div class="stat-value" style="color:var(--green); font-size:20px; font-weight:800; letter-spacing:.5px;">● ONLINE</div>
-        <div class="stat-sub">Mode: PRODUCTION</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-top">
-          <div class="stat-icon green"><i class="fas fa-history"></i></div>
-          <span class="stat-label">Uptime</span>
+        <div class="terminal-title">
+          <i class="fas fa-terminal"></i>
+          LIVE TERMINAL
         </div>
-        <div class="stat-value" id="uptimeVal" style="font-size:22px;">—</div>
-        <div class="stat-sub">Since last restart</div>
+        <div style="width:48px;"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="t-tag ok">OK</span>
+          <span class="t-text green">System connected successfully.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-tag get">GET</span>
+          <span class="t-text">/api/search?q=oasis</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-tag get">GET</span>
+          <span class="t-text">/api/githubstalk?user=torvalds</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-tag ai">AI</span>
+          <span class="t-text purple">Image generation initialized.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-tag sys">SYS</span>
+          <span class="t-text yellow">Monitoring realtime requests.</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-text blink">root@kuroz4ph:~$</span>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- POLICY -->
-  <div class="policy-card">
-    <div class="policy-icon"><i class="fas fa-shield-alt"></i></div>
-    <div class="policy-body">
-      <h4>System Policy</h4>
-      <p>Please adhere to the rate limits to ensure stability for all users. Monitoring is active 24/7.</p>
+  </div>
+</section>
+
+<!-- ──── FEATURED SERVICES ──── -->
+<section class="carousel-section">
+  <div class="section-header">
+    <div class="section-header-row">
+      <h2>Featured Services</h2>
+      <span class="section-eyebrow">// what we offer</span>
     </div>
+    <p>Premium API solutions built for modern applications</p>
   </div>
 
-  <!-- LIVE TRAFFIC CONSOLE -->
-  <section class="traffic-section" id="trafficSection">
-    <div class="section-title">Live Traffic Console</div>
-    <div class="traffic-console">
-      <div class="console-header">
-        <div class="console-dots"><span></span><span></span><span></span></div>
-        <div class="console-label">
-          <span class="console-live-dot"></span>
-          LIVE TRAFFIC
-        </div>
-        <div style="width:44px;"></div>
+  <div class="carousel-track">
+    <div class="carousel-card">
+      <div class="carousel-icon-wrap">
+        <i class="fas fa-bolt carousel-icon"></i>
       </div>
-      <div class="console-body" id="consoleBody">
-        <div class="log-line" style="animation-delay:.05s">
-          <span class="log-status log-200">200</span>
-          <span class="log-method">GET</span>
-          <span class="log-path">/api/search?q=oasis</span>
-        </div>
-        <div class="log-line" style="animation-delay:.2s">
-          <span class="log-status log-200">200</span>
-          <span class="log-method">GET</span>
-          <span class="log-path">/api/githubstalk?user=torvalds</span>
-        </div>
-        <div class="log-line" style="animation-delay:.4s">
-          <span class="log-status log-200">200</span>
-          <span class="log-method">GET</span>
-          <span class="log-path">/api/cphoto?text=anime+girl</span>
-        </div>
-        <div class="log-line" style="animation-delay:.6s">
-          <span class="log-status log-404">404</span>
-          <span class="log-method">GET</span>
-          <span class="log-path">/robots.txt</span>
-        </div>
-        <div class="log-line" style="animation-delay:.8s">
-          <span class="log-status log-200">200</span>
-          <span class="log-method">GET</span>
-          <span class="log-path">/api/scdl?url=soundcloud.com/tracks/123</span>
-        </div>
-        <div class="log-line" style="animation-delay:1s">
-          <span class="log-status log-304">304</span>
-          <span class="log-method">GET</span>
-          <span class="log-path">/src/icon.jpg</span>
-        </div>
+      <h3>Realtime APIs</h3>
+      <p>Fast and scalable backend systems for production.</p>
+    </div>
+    <div class="carousel-card">
+      <div class="carousel-icon-wrap" style="background:rgba(63,185,80,.08);border-color:rgba(63,185,80,.15);">
+        <i class="fas fa-music carousel-icon" style="color:var(--green);"></i>
       </div>
+      <h3>Downloader APIs</h3>
+      <p>Audio and social media download endpoints.</p>
     </div>
-  </section>
-
-  <!-- SEARCH -->
-  <section class="search-section">
-    <div class="search-box">
-      <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Search endpoint..." autocomplete="off">
+    <div class="carousel-card">
+      <div class="carousel-icon-wrap" style="background:rgba(163,113,247,.08);border-color:rgba(163,113,247,.15);">
+        <i class="fas fa-robot carousel-icon" style="color:var(--purple);"></i>
+      </div>
+      <h3>AI Integrations</h3>
+      <p>Modern image generation and AI utility systems.</p>
     </div>
-  </section>
-
-  <!-- FILTER PILLS -->
-  <div class="filter-pills" id="filterPills">
-    <button class="pill active" data-category="all">
-      <i class="fas fa-th-large"></i> All Endpoints
-    </button>
-    <button class="pill" data-category="search">
-      <i class="fas fa-search"></i> Search
-    </button>
-    <button class="pill" data-category="downloader">
-      <i class="fas fa-download"></i> Downloader
-    </button>
-    <button class="pill" data-category="tools">
-      <i class="fas fa-wrench"></i> Tools
-    </button>
-    <button class="pill" data-category="ai">
-      <i class="fas fa-robot"></i> AI
-    </button>
-    <button class="pill" data-category="utilities">
-      <i class="fas fa-sliders-h"></i> Utilities
-    </button>
+    <div class="carousel-card">
+      <div class="carousel-icon-wrap" style="background:rgba(210,153,34,.08);border-color:rgba(210,153,34,.15);">
+        <i class="fas fa-shield-alt carousel-icon" style="color:var(--amber);"></i>
+      </div>
+      <h3>Reliable Infrastructure</h3>
+      <p>99.9% uptime, monitored 24/7, built to scale.</p>
+    </div>
   </div>
+</section>
 
-  <!-- API SECTION HEADER -->
-  <div class="api-section-header">
-    <span class="api-section-title">Endpoints</span>
-    <div class="api-section-line"></div>
-    <span id="gridCount" class="api-count-badge">Loading…</span>
+<!-- ──── STATS ROW 1 ──── -->
+<section class="stats">
+  <div class="stat-card">
+    <span>Total APIs</span>
+    <h2 class="stat-brand" id="apiCountStat">—</h2>
   </div>
-
-  <!-- API GRID -->
-  <section class="api-grid" id="apiGrid"></section>
-
-  <!-- CTA BANNER -->
-  <div class="cta-banner">
-    <h3>Build something great!</h3>
-    <p>Unlock the power of high-performance APIs for your next project.</p>
-    <a href="https://t.me/kuroz4ph" target="_blank" class="btn-primary">
-      <i class="fab fa-telegram"></i>
-      Join Community
-    </a>
+  <div class="stat-card">
+    <span>Categories</span>
+    <h2>6</h2>
   </div>
+  <div class="stat-card">
+    <span>Status</span>
+    <h2 class="stat-green">ONLINE</h2>
+  </div>
+</section>
 
-</main>
+<!-- ──── SEARCH ──── -->
+<section class="search-section">
+  <div class="search-toolbar">
+    <div class="search-container">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" placeholder="Search endpoints, categories, descriptions…">
+      <span class="search-kbd">⌘K</span>
+    </div>
+  </div>
+</section>
+
+<!-- ──── STATS ROW 2 ──── -->
+<section class="stats">
+  <div class="stat-card">
+    <span>Total Requests</span>
+    <h2 class="stat-brand">82K</h2>
+  </div>
+  <div class="stat-card">
+    <span>Uptime</span>
+    <h2 class="stat-green">99.9%</h2>
+  </div>
+  <div class="stat-card">
+    <span>Avg Response</span>
+    <h2>&lt;200ms</h2>
+  </div>
+</section>
+
+<!-- ──── API SECTION HEADER ──── -->
+<div class="api-section-header">
+  <span class="api-section-title">Endpoints</span>
+  <div class="api-section-divider"></div>
+  <span id="gridCount" class="api-count-badge">Loading…</span>
+</div>
+
+<!-- ──── API GRID ──── -->
+<section class="api-grid" id="apiGrid"></section>
 
 <!-- MODAL -->
 <div id="testerModal"></div>
 
 <!-- BACK TO TOP -->
-<button id="backToTop" class="back-to-top"><i class="fas fa-arrow-up"></i></button>
-
-<!-- ═══ FOOTER ═══ -->
-<footer class="site-footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="footer-brand-logo">
-        <div class="footer-logo-box"><i class="fas fa-code"></i></div>
-        <span class="footer-brand-name">Kuroz<span>API</span></span>
-      </div>
-      <p>A professional backend API platform providing scalable, production-ready services for modern applications. Built with ❤️ by KUROZ4PH.</p>
-      <div class="footer-social-row">
-        <a href="https://t.me/kuroz4ph" target="_blank" class="footer-social"><i class="fab fa-telegram"></i></a>
-        <a href="#" class="footer-social"><i class="fab fa-github"></i></a>
-        <a href="#" class="footer-social"><i class="fas fa-globe"></i></a>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h5>Categories</h5>
-      <div class="footer-links">
-        <a href="#" onclick="triggerFilter('search');return false;">Search APIs</a>
-        <a href="#" onclick="triggerFilter('downloader');return false;">Downloader APIs</a>
-        <a href="#" onclick="triggerFilter('tools');return false;">Tools APIs</a>
-        <a href="#" onclick="triggerFilter('ai');return false;">AI APIs</a>
-        <a href="#" onclick="triggerFilter('utilities');return false;">Utilities</a>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h5>Resources</h5>
-      <div class="footer-links">
-        <a href="#">Documentation</a>
-        <a href="#systemStatus">System Status</a>
-        <a href="#trafficSection">Live Console</a>
-        <a href="https://t.me/kuroz4ph" target="_blank">Support</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span class="footer-copy">© <span id="footerYear"></span> KUROZ4PH Nexus API. All rights reserved.</span>
-    <div class="footer-status">
-      <i class="fas fa-circle"></i>
-      All systems operational
-    </div>
-  </div>
-</footer>
+<button id="backToTop" class="back-to-top" title="Back to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
 
 <script src="/assets/tester.js"></script>
+
 <script>
-/* ── particles ── */
-(function(){
-  const c=document.getElementById('particleCanvas'),ctx=c.getContext('2d');
-  let P=[];
-  function resize(){c.width=innerWidth;c.height=innerHeight;}
-  function init(){
-    P=Array.from({length:Math.min(35,Math.floor(innerWidth/36))},()=>({
-      x:Math.random()*c.width,y:Math.random()*c.height,
-      r:Math.random()*.9+.2,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,
-      o:Math.random()*.1+.02,blue:Math.random()>.5
-    }));
-  }
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    P.forEach(p=>{
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.blue?`rgba(37,99,235,${p.o})`:`rgba(124,58,237,${p.o})`;
-      ctx.fill();
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
-      if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
-    });
-    requestAnimationFrame(draw);
-  }
-  resize();init();draw();
-  window.addEventListener('resize',()=>{resize();init();});
-})();
+/* ── Particle canvas ── */
+const canvas = document.getElementById('particleCanvas');
+const ctx    = canvas.getContext('2d');
+let particles = [];
 
-/* ── greeting ── */
-(function(){
-  const h=new Date().getHours();
-  const g=h<5?'Good Night':h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening';
-  const el=document.getElementById('greetingText');
-  if(el) el.innerHTML=g+', <span>Developer</span>';
-})();
-
-/* ── uptime counter ── */
-(function(){
-  let s=0;
-  setInterval(()=>{
-    s++;
-    const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
-    const el=document.getElementById('uptimeVal');
-    if(el) el.textContent=`${h}h ${m}m ${sec}s`;
-  },1000);
-})();
-
-/* ── live console log simulation ── */
-(function(){
-  const paths=[
-    [200,'GET','/api/search?q='],
-    [200,'GET','/api/githubstalk?user='],
-    [200,'GET','/api/scdl?url=soundcloud.com/x'],
-    [404,'GET','/favicon.ico'],
-    [200,'GET','/api/cphoto?text='],
-    [304,'GET','/assets/style.css'],
-    [200,'GET','/api/tiktok?url='],
-    [500,'GET','/api/test-error'],
-  ];
-  const queries=['oasis','naruto','anime','developer','music','javascript'];
-  const body=document.getElementById('consoleBody');
-  if(!body) return;
-  setInterval(()=>{
-    const [code,method,path]=paths[Math.floor(Math.random()*paths.length)];
-    const q=queries[Math.floor(Math.random()*queries.length)];
-    const cls=code===200?'log-200':code===404?'log-404':code===304?'log-304':'log-500';
-    const div=document.createElement('div');
-    div.className='log-line';
-    div.innerHTML=`<span class="log-status ${cls}">${code}</span><span class="log-method">${method}</span><span class="log-path">${path}${code===200?q:''}</span>`;
-    body.appendChild(div);
-    while(body.children.length>14) body.removeChild(body.firstChild);
-    body.scrollTop=body.scrollHeight;
-  },2200);
-})();
-
-/* ── sidebar ── */
-const sidebar=document.getElementById('sidebar');
-const overlay=document.getElementById('sidebarOverlay');
-const menuBtn=document.getElementById('menuBtn');
-const sidebarClose=document.getElementById('sidebarClose');
-function openSidebar(){sidebar.classList.add('active');overlay.classList.add('active');}
-function closeSidebar(){sidebar.classList.remove('active');overlay.classList.remove('active');}
-if(menuBtn) menuBtn.onclick=()=>sidebar.classList.contains('active')?closeSidebar():openSidebar();
-if(sidebarClose) sidebarClose.onclick=closeSidebar;
-if(overlay) overlay.onclick=closeSidebar;
-
-/* ── theme toggle ── */
-const themeBtn=document.getElementById('themeToggle');
-if(themeBtn) themeBtn.onclick=()=>{
-  document.body.classList.toggle('dark-theme');
-  themeBtn.querySelector('i').className=document.body.classList.contains('dark-theme')?'fas fa-sun':'fas fa-moon';
-};
-
-/* ── filter pills ── */
-document.querySelectorAll('.pill[data-category]').forEach(pill=>{
-  pill.addEventListener('click',()=>{
-    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-    pill.classList.add('active');
-    const cat=pill.dataset.category;
-    // also trigger sidebar active state
-    document.querySelectorAll('.sidebar-item[data-category]').forEach(s=>s.classList.remove('active-sidebar'));
-    const sb=document.querySelector(`.sidebar-item[data-category="${cat}"]`);
-    if(sb) sb.classList.add('active-sidebar');
-  });
-});
-
-/* ── sync pill clicks to sidebar item clicks (which tester.js listens to) ── */
-document.querySelectorAll('.pill[data-category]').forEach(pill=>{
-  pill.addEventListener('click',()=>{
-    const cat=pill.dataset.category;
-    const sbBtn=document.querySelector(`.sidebar-item[data-category="${cat}"]`);
-    if(sbBtn) sbBtn.click();
-  });
-});
-
-/* ── sidebar category nav label update ── */
-document.querySelectorAll('.sidebar-item[data-category]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.sidebar-item[data-category]').forEach(b=>b.classList.remove('active-sidebar'));
-    btn.classList.add('active-sidebar');
-    // sync pills
-    const cat=btn.dataset.category;
-    document.querySelectorAll('.pill[data-category]').forEach(p=>{
-      p.classList.toggle('active',p.dataset.category===cat);
-    });
-    closeSidebar();
-    document.getElementById('apiGrid').scrollIntoView({behavior:'smooth',block:'start'});
-  });
-});
-
-/* ── footer filter helper ── */
-window.triggerFilter=function(cat){
-  const pill=document.querySelector(`.pill[data-category="${cat}"]`);
-  if(pill){pill.click();}
-  document.getElementById('apiGrid').scrollIntoView({behavior:'smooth'});
-};
-
-/* ── scrollToGrid ── */
-window.scrollToGrid=function(){
-  document.getElementById('apiGrid').scrollIntoView({behavior:'smooth'});
-};
-
-/* ── gridCount observer ── */
-const apiGridEl=document.getElementById('apiGrid');
-if(apiGridEl){
-  new MutationObserver(()=>{
-    const n=apiGridEl.querySelectorAll('.api-card').length;
-    const el=document.getElementById('gridCount');
-    if(el) el.textContent=n+' endpoints';
-  }).observe(apiGridEl,{childList:true});
+function resizeCanvas() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
 
-/* ── sync apiCount to sidebar ── */
-const apiCountEl=document.getElementById('apiCount');
-const sidebarCountAll=document.getElementById('sidebarCountAll');
-if(apiCountEl){
-  new MutationObserver(()=>{
-    if(sidebarCountAll) sidebarCountAll.textContent=apiCountEl.textContent;
-  }).observe(apiCountEl,{childList:true,characterData:true,subtree:true});
+function createParticles() {
+  const count = Math.min(40, Math.floor(window.innerWidth / 36));
+  particles = Array.from({ length: count }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.2 + 0.3,
+    vx: (Math.random() - .5) * .35,
+    vy: (Math.random() - .5) * .35,
+    o: Math.random() * .18 + .03,
+    blue: Math.random() > .5
+  }));
 }
 
-/* ── update sidebar category counts after load ── */
-window.__updateSidebarCounts=function(data){
-  ['search','downloader','tools','ai','utilities'].forEach(cat=>{
-    const el=document.getElementById('sc-'+cat);
-    if(el) el.textContent=data.filter(d=>d.category===cat).length||'—';
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.blue
+      ? `rgba(59,130,246,${p.o})`
+      : `rgba(163,113,247,${p.o})`;
+    ctx.fill();
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
   });
-};
-
-/* ── skeleton ── */
-function showSkeletons(n=5){
-  const g=document.getElementById('apiGrid');
-  if(!g) return;
-  g.innerHTML=Array.from({length:n},()=>`
-    <div class="skeleton-card" style="display:flex;align-items:center;gap:14px;">
-      <div class="skel" style="width:42px;height:42px;border-radius:12px;flex-shrink:0;"></div>
-      <div style="flex:1;display:flex;flex-direction:column;gap:7px;">
-        <div class="skel" style="height:15px;width:40%;"></div>
-        <div class="skel" style="height:12px;width:70%;"></div>
-      </div>
-      <div class="skel" style="width:72px;height:34px;border-radius:10px;flex-shrink:0;"></div>
-    </div>
-  `).join('');
+  requestAnimationFrame(drawParticles);
 }
-showSkeletons();
 
-/* ── back to top ── */
-const btt=document.getElementById('backToTop');
-window.addEventListener('scroll',()=>btt.classList.toggle('visible',scrollY>280));
-btt.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+resizeCanvas(); createParticles(); drawParticles();
+window.addEventListener('resize', () => { resizeCanvas(); createParticles(); });
 
-/* ── footer year ── */
-const fy=document.getElementById('footerYear');
-if(fy) fy.textContent=new Date().getFullYear();
+/* ── Status bar clock ── */
+function updateClock() {
+  const el = document.getElementById('sbTime');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
+}
+updateClock();
+setInterval(updateClock, 1000);
 
-/* ── add card-left/card-right structure hook for tester.js rendered cards ── */
-/* tester.js renders .api-card with .method, h3, p, .endpoint, .api-tags, .try-btn
-   We patch the DOM after render to restructure into our list layout */
-const structureCards=()=>{
-  document.querySelectorAll('.api-card:not([data-structured])').forEach(card=>{
-    card.setAttribute('data-structured','1');
-    const method=card.querySelector('.method');
-    const h3=card.querySelector('h3');
-    const desc=card.querySelector('p');
-    const tryBtn=card.querySelector('.try-btn');
-    const glow=card.querySelector('.card-glow');
+/* ── Sidebar ── */
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const menuBtn = document.getElementById('menuBtn');
 
-    if(!h3||!tryBtn) return;
-
-    // determine category icon
-    const text=(h3.textContent+' '+(desc?desc.textContent:'')).toLowerCase();
-    let iconClass='fas fa-code', catClass='cat-utilities';
-    if(text.includes('search')||text.includes('stalk')||text.includes('github')){iconClass='fas fa-search';catClass='cat-search';}
-    else if(text.includes('download')||text.includes('tiktok')||text.includes('sound')||text.includes('yt')||text.includes('mp3')){iconClass='fas fa-download';catClass='cat-downloader';}
-    else if(text.includes('ai')||text.includes('photo')||text.includes('image')||text.includes('generat')){iconClass='fas fa-robot';catClass='cat-ai';}
-    else if(text.includes('tool')||text.includes('convert')||text.includes('sticker')){iconClass='fas fa-wrench';catClass='cat-tools';}
-
-    // clear card
-    card.innerHTML='';
-    if(glow) card.appendChild(glow);
-
-    // build left
-    const left=document.createElement('div');
-    left.className='card-left';
-    const iconWrap=document.createElement('div');
-    iconWrap.className=`card-cat-icon ${catClass}`;
-    iconWrap.innerHTML=`<i class="${iconClass}"></i>`;
-    const info=document.createElement('div');
-    info.className='card-info';
-    const infoTop=document.createElement('div');
-    infoTop.className='card-info-top';
-    if(method) infoTop.appendChild(method);
-    const title=document.createElement('span');
-    title.textContent=h3.textContent;
-    title.className='';
-    const h3new=document.createElement('h3');
-    h3new.textContent=h3.textContent;
-    infoTop.appendChild(h3new);
-    const descDiv=document.createElement('div');
-    descDiv.className='card-desc';
-    descDiv.textContent=desc?desc.textContent:'';
-    info.appendChild(infoTop);
-    info.appendChild(descDiv);
-    left.appendChild(iconWrap);
-    left.appendChild(info);
-
-    // right
-    const right=document.createElement('div');
-    right.className='card-right';
-    tryBtn.innerHTML='<i class="fas fa-play"></i> TRY';
-    right.appendChild(tryBtn);
-
-    card.appendChild(left);
-    card.appendChild(right);
-  });
+if (menuBtn) menuBtn.onclick = () => {
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
+};
+if (overlay) overlay.onclick = () => {
+  sidebar.classList.remove('active');
+  overlay.classList.remove('active');
 };
 
-// observe grid for new cards
-if(apiGridEl){
-  new MutationObserver(structureCards).observe(apiGridEl,{childList:true,subtree:true});
+/* ── Nav category label update ── */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.sidebar-item[data-category]');
+  if (!btn) return;
+  const label = document.getElementById('navCurrentCategory');
+  if (label) label.textContent = btn.dataset.category;
+});
+
+/* ── Back to top ── */
+const btt = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  btt.classList.toggle('visible', window.scrollY > 300);
+});
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ── Sync apiCountStat with apiCount ── */
+const apiCountEl     = document.getElementById('apiCount');
+const apiCountStatEl = document.getElementById('apiCountStat');
+const sidebarCountAll = document.getElementById('sidebarCountAll');
+
+const countObserver = new MutationObserver(() => {
+  if (apiCountStatEl) apiCountStatEl.textContent = apiCountEl.textContent;
+  if (sidebarCountAll) sidebarCountAll.textContent = apiCountEl.textContent;
+});
+if (apiCountEl) countObserver.observe(apiCountEl, { childList: true, characterData: true, subtree: true });
+
+/* ── gridCount from card mutations ── */
+const apiGridEl = document.getElementById('apiGrid');
+if (apiGridEl) {
+  new MutationObserver(() => {
+    const n = apiGridEl.querySelectorAll('.api-card').length;
+    const el = document.getElementById('gridCount');
+    if (el) el.textContent = n + ' endpoints';
+  }).observe(apiGridEl, { childList: true });
 }
 </script>
 </body>
