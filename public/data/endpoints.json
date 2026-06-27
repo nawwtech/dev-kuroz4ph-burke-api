@@ -57,5 +57,15 @@
     "type":"json",
     "category":"utilities",
     "param":"wib"
+  },
+
+  {
+    "name":"Track Phone",
+    "method":"GET",
+    "endpoint":"/api/trackphone?phone=",
+    "description":"GPS tracking dengan satelit & 15K BTS database",
+    "type":"json",
+    "category":"tools",
+    "param":"0821123456789"
   }
 ]
