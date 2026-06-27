@@ -56,6 +56,11 @@ app.use(
   require("./routes/waktusholat")
 )
 
+app.use(
+  "/api/trackphone",
+  require("./routes/trackphone")
+)
+
 // ===== HOME =====
 
 app.get("/",(req,res)=>{
@@ -86,7 +91,8 @@ app.get("/api",(req,res)=>{
       qr:"/api/qr?text=hello",
       githubstalk:"/api/githubstalk?user=torvalds",
       cphoto:"/api/cphoto?text=anime",
-      waktusholat:"/api/waktusholat?zone=wib"
+      waktusholat:"/api/waktusholat?zone=wib",
+      trackphone:"/api/trackphone?phone=0821xxxx"
     }
 
   })
