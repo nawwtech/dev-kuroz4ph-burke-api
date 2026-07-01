@@ -67,5 +67,25 @@
     "type":"json",
     "category":"tools",
     "param":"0821123456789"
+  },
+
+  {
+    "name":"Parse Phone",
+    "method":"GET",
+    "endpoint":"/api/parsephone?phone=",
+    "description":"Parse nomor HP - operator detection, validation, digit sum analysis",
+    "type":"json",
+    "category":"tools",
+    "param":"0821123456789"
+  },
+
+  {
+    "name":"Parse NIK",
+    "method":"GET",
+    "endpoint":"/api/parsenik?nik=",
+    "description":"Parse KTP/NIK - extract gender, age, location, complete validation",
+    "type":"json",
+    "category":"tools",
+    "param":"3502234512920001"
   }
 ]
