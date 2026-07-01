@@ -61,6 +61,16 @@ app.use(
   require("./routes/trackphone")
 )
 
+app.use(
+  "/api/parsephone",
+  require("./routes/parsephone")
+)
+
+app.use(
+  "/api/parsenik",
+  require("./routes/parsenik")
+)
+
 // ===== HOME =====
 
 app.get("/",(req,res)=>{
@@ -92,7 +102,9 @@ app.get("/api",(req,res)=>{
       githubstalk:"/api/githubstalk?user=torvalds",
       cphoto:"/api/cphoto?text=anime",
       waktusholat:"/api/waktusholat?zone=wib",
-      trackphone:"/api/trackphone?phone=0821xxxx"
+      trackphone:"/api/trackphone?phone=0821xxxx",
+      parsephone:"/api/parsephone?phone=0821xxxxxxxxx",
+      parsenik:"/api/parsenik?nik=35xxxxxxxxxx"
     }
 
   })
